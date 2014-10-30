@@ -1,4 +1,5 @@
 #include "../GenArray/GenArray.h"
+#include "../Node/Node.cpp"
 
 class HashMap
 {
@@ -15,5 +16,6 @@ private:
 public:
 	HashMap(int start_size);
 	HashMap();
-	bool addEntry();
+	bool insertNode(Node* );
+	bool insertEdge();
 };
