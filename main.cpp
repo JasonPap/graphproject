@@ -8,5 +8,6 @@ int main(void)
 {
 
 	HashMap* xartis = new HashMap(10);
+
 	//list* liiiiist = new list();
 }
