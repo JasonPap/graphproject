@@ -46,6 +46,14 @@ bool GenArray::addCell()
 
 }
 
+bool GenArray::isFull()
+{
+	if(num_of_items >= size)
+		return true;
+	else
+		return false;
+}
+
 int GenArray::getSize()
 {
 	return size;

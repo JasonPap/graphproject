@@ -16,5 +16,6 @@ public:
 	bool doubleCells();
 	int getSize();
 	int fillIt();
+	bool isFull();
 
 };
