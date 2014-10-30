@@ -3,17 +3,12 @@
 
 using namespace std;
 
-HashMap::HashMap(int start_size) 
+HashMap::HashMap(int start_size, int bucket_cells) 
 {
 	hashTable = new GenArray(start_size);
 	split_index = 0;
 	round = 0; 
 	original_size = start_size;
-}
-
-HashMap::HashMap()
-{
- cout<<"THIS IS BULLSHIT"<<endl;
 }
 
 int HashMap::hash(int i)

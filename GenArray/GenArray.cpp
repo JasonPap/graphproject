@@ -6,28 +6,29 @@ using namespace std;
 GenArray::GenArray(int s) : size(s)
 {
 
-	currentSize = s;
+	num_of_items = 0;
 
-	arr = (void **) malloc(size * sizeof(void*));
+	arrayPtr = (void **) malloc(size * sizeof(void*));
 	for (int i = 0; i < size; i++)
 	{
-		arr[i] = NULL;
+		arrayPtr[i] = NULL;
 	}
 }
 GenArray::~GenArray()
 {
 	for (int i = 0; i < size; i++)
 	{
-		arr[i] = NULL;
+		if (arrayPtr[i] != NULL)
+			free(arrayPtr[i]);
 	}
-	delete arr;
+	free(arrayPtr);
 }
 
 bool GenArray::doubleCells()
 {
-	arr = (void **) realloc(arr, 2 * currentSize * sizeof(void*));
-	currentSize = 2 * currentSize;
-	if (arr != NULL)
+	arrayPtr = (void **) realloc(arrayPtr, 2 * size * sizeof(void*));
+	size = 2 * size;
+	if ( arrayPtr != NULL )
 		return 1;
 	else
 		return 0;
@@ -36,9 +37,9 @@ bool GenArray::doubleCells()
 bool GenArray::addCell()
 {
 
-	arr = (void **) realloc(arr, (++currentSize * sizeof(void*)) );
+	arrayPtr = (void **) realloc(arrayPtr, (++size * sizeof(void*)) );
 	
-	if ( arr != NULL )
+	if ( arrayPtr != NULL )
 		return 1;
 	else
 		return 0;
@@ -47,18 +48,18 @@ bool GenArray::addCell()
 
 int GenArray::getSize()
 {
-	return currentSize;
+	return size;
 }
 
 int GenArray::fillIt()
 {
 	int i = 0;
-	for( i = 0 ; i < currentSize ; i++ )
+	for( i = 0 ; i < size ; i++ )
 	{
 		int k = 500;
-		arr[i] = &k;
+		arrayPtr[i] = &k;
 	}
-	return *(int*) (arr[currentSize-1]);
+	return *(int*) (arrayPtr[size-1]);
 }
 
 

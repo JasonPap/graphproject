@@ -4,10 +4,12 @@ class GenArray
 private:
 
 	int size;
-	int currentSize;
-	void** arr;
 
 public:
+
+	void** arrayPtr;
+	int num_of_items;
+
 	GenArray(int);
 	~GenArray();
 	bool addCell();

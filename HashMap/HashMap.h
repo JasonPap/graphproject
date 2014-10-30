@@ -14,7 +14,7 @@ private:
 	int next_hash(int );
 	
 public:
-	HashMap(int start_size, int bucket_cells);
+	HashMap(int start_size,int bucket_cells);
 	bool insertNode(Node* );
 	bool insertEdge();
 };
