@@ -10,6 +10,15 @@ Node::Node(int ID)
 	links = NULL;
 }
 
+Node::~Node()
+{
+	if(properties != NULL)
+		delete properties;
+	
+	if(links != NULL)
+		delete links;
+}
+
 int Node::get_id()
 {
 	return id;
