@@ -13,6 +13,7 @@ private:
 	int hash(int );
 	int next_hash(int );
 	
+	void insert_into_array(Node*,GenArray*);
 public:
 	HashMap(int start_size,int bucket_cells);
 	bool insertNode(Node* );

@@ -34,9 +34,12 @@ bool HashMap::insertNode(Node* new_node)
 	int bucket_num = hash(new_node->get_id());
 	
 	//check if bucket is full
+	if(!(hashTable->arrayPtr[bucket_num])->isFull())
+	{
 	//if not
-	//insert_to_array(new_node,hashTable->array[bucket_num]);
+		insert_to_array(new_node,hashTable->arrayPtr[bucket_num]);
 	//
+	}
 	//if bucket is full
 	////split()
 	////.....
