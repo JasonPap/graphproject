@@ -6,6 +6,12 @@ using namespace std;
 HashMap::HashMap(int start_size, int bucket_cells) 
 {
 	hashTable = new GenArray(start_size);
+	for (int i = 0; i < start_size; i++)
+	{
+
+		hashTable->arrayPtr[i] = new GenArray(bucket_cells);
+	
+	}
 	split_index = 0;
 	round = 0; 
 	original_size = start_size;
