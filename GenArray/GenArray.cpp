@@ -16,11 +16,11 @@ GenArray::GenArray(int s) : size(s)
 }
 GenArray::~GenArray()
 {
-	for (int i = 0; i < size; i++)
+	/*for (int i = 0; i < size; i++)
 	{
 		if (arrayPtr[i] != NULL)
 			free(arrayPtr[i]);
-	}
+	}*/
 	free(arrayPtr);
 }
 
@@ -29,20 +29,20 @@ bool GenArray::doubleCells()
 	arrayPtr = (void **) realloc(arrayPtr, 2 * size * sizeof(void*));
 	size = 2 * size;
 	if ( arrayPtr != NULL )
-		return 1;
+		return true;
 	else
-		return 0;
+		return false;
 }
 
 bool GenArray::addCell()
 {
 
 	arrayPtr = (void **) realloc(arrayPtr, (++size * sizeof(void*)) );
-	
+
 	if ( arrayPtr != NULL )
-		return 1;
+		return true;
 	else
-		return 0;
+		return false;
 
 }
 
@@ -52,6 +52,11 @@ bool GenArray::isFull()
 		return true;
 	else
 		return false;
+}
+
+int GenArray::getNumOfItems()
+{
+    return num_of_items;
 }
 
 int GenArray::getSize()
