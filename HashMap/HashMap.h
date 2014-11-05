@@ -17,6 +17,7 @@ private:
 	bool insert_into_array(Node*,GenArray*);
 	bool split();
 public:
+	(Node *) lokupNode(int );
 	HashMap(int start_size,int bucket_cells);
 	bool insertNode(Node* );
 	bool insertEdge();

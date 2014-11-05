@@ -113,3 +113,42 @@ bool HashMap::insert_to_array(Node* new_node, GenArray* _array)
     _array->num_of_items++;
     return doubled;
 }
+
+(Node*) HashMap::lookupNode(int idSearched)
+{
+	int bucket_index = hash(idSearched);
+	int found = 0;
+
+	if ( bucket_index < split_index)
+	{
+		bucket_index = next_hash(idSearched);
+	}
+
+	GenArray* bucket = hashTable->arrayPtr[bucket_index];
+	int num_of_items = bucket->getNumOfItems();
+	int min = 0, max = num_of_items - 1;
+	int mid = (max + min) / 2;
+
+	// :)
+
+	while (min<=max)
+	{
+
+		if ( bucket->arrayPtr[mid]->get_id() == idSearched )
+		{
+			return bucket->arrayPtr[mid];
+		}
+		else if (bucket->arrayPtr[mid]->get_id() < idSearched)
+		{
+			min = mid+1;
+			mid = (min + max) / 2;
+		}
+		else if (bucket->arrayPtr[mid]->get_id() > idSearched)
+		{
+			max = mid-1;
+			mid = (min + max) / 2;
+		}
+
+	}
+	return null;
+}
