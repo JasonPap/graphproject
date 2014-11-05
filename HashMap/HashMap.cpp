@@ -1,5 +1,6 @@
 #include <iostream>
 #include "HashMap.h"
+#include <math.h>
 
 using namespace std;
 
@@ -20,13 +21,13 @@ HashMap::HashMap(int start_size, int _bucket_cells)
 
 int HashMap::hash(int i)
 {
-	int r = i % ( pow(2,round) * original_size );
+	int r = i % (int)( pow(2,round) * original_size );
 	return r;
 }
 
 int HashMap::next_hash(int i)
 {
-	int r = i % ( pow(2,round + 1) * original_size );
+	int r = i % (int)( pow(2,round + 1) * original_size );
 	return r;
 }
 
@@ -46,7 +47,7 @@ bool HashMap::insertNode(Node* new_node)
 	//hashTable->arrayPtr[bucket_num]->doubleCells();
 	//if(!insert_to_array(new_node,hashTable->arrayPtr[bucket_num]))
     //    cout<<"Errrrrrrrrrrrrrrroorrrr"<<endl;
-    if(insert_into_array(new_node,hashTable->arrayPtr[bucket_num]))
+    if(insert_into_array(new_node,(GenArray*)hashTable->arrayPtr[bucket_num]))
     {
         split();
     }
@@ -60,7 +61,7 @@ bool HashMap::split()
     GenArray* newBucket = new GenArray(bucket_cells);
 
     hashTable->arrayPtr[hashTable->getSize()-1] = newBucket;
-
+    hashTable->num_of_items++;
     ///bucket <- p
     ///newBucket empty
 
@@ -68,17 +69,17 @@ bool HashMap::split()
 
     GenArray* p_bucket = new GenArray(bucket_cells);
 
-    GenArray* bucket_to_split = hashTable->arrayPtr[split_index];
+    GenArray* bucket_to_split = (GenArray*)hashTable->arrayPtr[split_index];
 
     for(int i = 0; i < bucket_to_split->getNumOfItems(); i++)
     {
-        if(next_hash(bucket_to_split->arrayPtr[i]->get_id()) != split_index)
+        if(next_hash(((Node*)bucket_to_split->arrayPtr[i])->get_id()) != split_index)
         {
-            insert_into_array(bucket_to_split->arrayPtr[i],newBucket);
+            insert_into_array((Node*)bucket_to_split->arrayPtr[i],newBucket);
         }
         else
         {
-            insert_into_array(bucket_to_split->arrayPtr[i],p_bucket);
+            insert_into_array((Node*)bucket_to_split->arrayPtr[i],p_bucket);
         }
     }
 
@@ -96,7 +97,7 @@ bool HashMap::split()
 
 }
 
-bool HashMap::insert_to_array(Node* new_node, GenArray* _array)
+bool HashMap::insert_into_array(Node* new_node, GenArray* _array)
 {
     bool doubled;
     if(_array->isFull())
@@ -109,12 +110,12 @@ bool HashMap::insert_to_array(Node* new_node, GenArray* _array)
         doubled = false;
     }
 
-    _array->arrayPtr[num_of_items] = new_node;
+    _array->arrayPtr[_array->num_of_items] = new_node;
     _array->num_of_items++;
     return doubled;
 }
 
-(Node*) HashMap::lookupNode(int idSearched)
+Node*  HashMap::lookupNode(int idSearched)
 {
 	int bucket_index = hash(idSearched);
 	int found = 0;
@@ -124,7 +125,7 @@ bool HashMap::insert_to_array(Node* new_node, GenArray* _array)
 		bucket_index = next_hash(idSearched);
 	}
 
-	GenArray* bucket = hashTable->arrayPtr[bucket_index];
+	GenArray* bucket = (GenArray*) hashTable->arrayPtr[bucket_index];
 	int num_of_items = bucket->getNumOfItems();
 	int min = 0, max = num_of_items - 1;
 	int mid = (max + min) / 2;
@@ -134,21 +135,28 @@ bool HashMap::insert_to_array(Node* new_node, GenArray* _array)
 	while (min<=max)
 	{
 
-		if ( bucket->arrayPtr[mid]->get_id() == idSearched )
+		if ( ((Node*)bucket->arrayPtr[mid])->get_id() == idSearched )
 		{
-			return bucket->arrayPtr[mid];
+			return (Node*)bucket->arrayPtr[mid];
 		}
-		else if (bucket->arrayPtr[mid]->get_id() < idSearched)
+		else if (((Node*)bucket->arrayPtr[mid])->get_id() < idSearched)
 		{
 			min = mid+1;
 			mid = (min + max) / 2;
 		}
-		else if (bucket->arrayPtr[mid]->get_id() > idSearched)
+		else if (((Node*)bucket->arrayPtr[mid])->get_id() > idSearched)
 		{
 			max = mid-1;
 			mid = (min + max) / 2;
 		}
 
 	}
-	return null;
+	return NULL;
+}
+void HashMap::sort_map()
+{
+    for( int i = 0; i < hashTable->getNumOfItems() ; i++)
+    {
+        ((GenArray*)hashTable->arrayPtr[i])->merge_sort();
+    }
 }

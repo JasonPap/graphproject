@@ -7,7 +7,7 @@ using namespace std;
 int main(void)
 {
 
-	HashMap* xartis = new HashMap(10);
+	HashMap* xartis = new HashMap(10,3);
 
 	//list* liiiiist = new list();
 }
