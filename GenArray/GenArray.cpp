@@ -1,6 +1,7 @@
 #include "GenArray.h"
 #include "../Node/Node.h"
 #include <stdlib.h>
+#include <iostream>
 
 using namespace std;
 
@@ -125,4 +126,12 @@ void GenArray::TopDownMerge(void* A[], int iBegin, int iMiddle, int iEnd, void* 
         }
     }
 
+}
+
+void GenArray::print()
+{
+    for(int i = 0; i < num_of_items ; i++)
+    {
+        cout<<((Node*)arrayPtr[i])->get_id()<<"  ";
+    }
 }

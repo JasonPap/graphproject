@@ -4,7 +4,8 @@
 class HashMap
 {
 
-private:
+//private:
+public:
 	int split_index;
 	int original_size;
 	int round;
@@ -22,4 +23,5 @@ public:
 	HashMap(int start_size,int bucket_cells);
 	bool insertNode(Node* );
 	bool insertEdge();
+	void print();
 };

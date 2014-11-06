@@ -26,6 +26,7 @@ public:
 	bool isFull();
 
 	void merge_sort();
+	void print();
 
 };
 #endif // GENARRAY_H

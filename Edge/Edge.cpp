@@ -1,4 +1,6 @@
-using namespace std;
+#include "Edge.h"
+
+
 
 Edge::Edge(int x, void* _type)
 {

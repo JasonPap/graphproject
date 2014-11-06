@@ -34,7 +34,7 @@ int HashMap::next_hash(int i)
 bool HashMap::insertNode(Node* new_node)
 {
 	int bucket_num = hash(new_node->get_id());
-
+    //cout<<"mothafaka"<<endl;
 	//check if bucket is full
 	//if(!(hashTable->arrayPtr[bucket_num])->isFull())
 	//{
@@ -51,7 +51,7 @@ bool HashMap::insertNode(Node* new_node)
     {
         split();
     }
-
+    cout<<"inserted node with ID: "<<new_node->get_id()<<endl;
 	////.....
 }
 
@@ -111,7 +111,9 @@ bool HashMap::insert_into_array(Node* new_node, GenArray* _array)
     }
 
     _array->arrayPtr[_array->num_of_items] = new_node;
-    _array->num_of_items++;
+    //cout<<_array->num_of_items<<endl;
+    (_array->num_of_items)++;
+    //cout<<_array->num_of_items<<endl;
     return doubled;
 }
 
@@ -158,5 +160,15 @@ void HashMap::sort_map()
     for( int i = 0; i < hashTable->getNumOfItems() ; i++)
     {
         ((GenArray*)hashTable->arrayPtr[i])->merge_sort();
+    }
+}
+
+void HashMap::print()
+{
+    for( int i = 0; i < hashTable->getSize() ; i++)
+    {
+        cout<<"row["<<i<<"]:  ";
+        ((GenArray*)hashTable->arrayPtr[i])->print();
+        cout<<endl;
     }
 }
