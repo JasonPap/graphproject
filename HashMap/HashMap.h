@@ -1,5 +1,6 @@
 #include "../GenArray/GenArray.h"
 #include "../Node/Node.h"
+#include "../Edge/Edge.h"
 
 class HashMap
 {
@@ -19,6 +20,8 @@ public:
 	bool split();
 	void sort_map();
 public:
+
+	bool insertEdge(int id, Edge * insEdge);
 	Node * lookupNode(int );
 	HashMap(int start_size,int bucket_cells);
 	bool insertNode(Node* );

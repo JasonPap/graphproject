@@ -34,6 +34,8 @@ int HashMap::next_hash(int i)
 bool HashMap::insertNode(Node* new_node)
 {
 	int bucket_num = hash(new_node->get_id());
+	if (bucket_num < split_index)
+		bucket_num = next_hash(new_node->get_id());
     //cout<<"mothafaka"<<endl;
 	//check if bucket is full
 	//if(!(hashTable->arrayPtr[bucket_num])->isFull())
@@ -171,4 +173,13 @@ void HashMap::print()
         ((GenArray*)hashTable->arrayPtr[i])->print();
         cout<<endl;
     }
+
+	bool HashMap::insertEdge(int id, Edge * insEdge)
+	{
+		Node* temp = lookupNode(id);
+		temp->links->Add(insEdge);
+	}
+
 }
+
+
