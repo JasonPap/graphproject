@@ -173,13 +173,16 @@ void HashMap::print()
         ((GenArray*)hashTable->arrayPtr[i])->print();
         cout<<endl;
     }
-
-	bool HashMap::insertEdge(int id, Edge * insEdge)
-	{
-		Node* temp = lookupNode(id);
-		temp->links->Add(insEdge);
-	}
-
 }
 
+bool HashMap::insertEdge(int id, Edge * insEdge)
+{
+    Node* temp = lookupNode(id);
+    temp->links->Add(insEdge);
+}
 
+ResultSet* HashMap::reachNodesN(Node* start_node)
+{
+    ResultSet* return_set = new ResultSet(start_node);
+    return return_set;
+}

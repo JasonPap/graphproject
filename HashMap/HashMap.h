@@ -1,6 +1,7 @@
 #include "../GenArray/GenArray.h"
 #include "../Node/Node.h"
 #include "../Edge/Edge.h"
+#include "./ResultSet/ResultSet.h"
 
 class HashMap
 {
@@ -27,4 +28,5 @@ public:
 	bool insertNode(Node* );
 	bool insertEdge();
 	void print();
+	ResultSet* reachNodesN(Node*);
 };
