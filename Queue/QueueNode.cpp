@@ -3,11 +3,12 @@
 
 using namespace std;
 
-QueueNode::QueueNode(Node * _komvos, QueueNode * previous )
+QueueNode::QueueNode(Node * _komvos, QueueNode * previous, int _depth)
 {
 	komvos = _komvos;
 	nextInQueue = NULL;
 	previousInQueue = previous;
+	depth = _depth;
 }
 
 QueueNode::~QueueNode()
@@ -35,4 +36,9 @@ void QueueNode::setPrev(QueueNode * tempPrev)
 void QueueNode::setNext(QueueNode * tempNext)
 {
 	nextInQueue = tempNext;
+}
+
+int QueueNode::getDepth()
+{
+	return depth;
 }

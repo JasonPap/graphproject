@@ -11,14 +11,16 @@ private:
 	QueueNode * previousInQueue;
 	Node * komvos;
 
+	int depth;
+
 public:
 
-	QueueNode(Node* _komvos, QueueNode * prev);
+	QueueNode(Node* _komvos, QueueNode * prev, int _depth);
 	~QueueNode();
 	Node * returnNode();
 	QueueNode * getNext();
 	void setPrev(QueueNode *);
 	void setNext(QueueNode *);
-
+	int getDepth();
 };
 #endif

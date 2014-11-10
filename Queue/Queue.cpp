@@ -46,11 +46,11 @@ void Queue::popNode()
 
 }
 
-void Queue::addNode(Node * temp)
+void Queue::addNode(Node * temp, int depth)
 {
 
 
-	QueueNode * tempL = new QueueNode(temp, last);
+	QueueNode * tempL = new QueueNode(temp, last, depth);
 	if( size != 0 )
 		last->setNext(tempL);
 	last = tempL;
@@ -65,4 +65,9 @@ void Queue::addNode(Node * temp)
 int Queue::getSize()
 {
 	return size;
+}
+
+int Queue::lookupNextDepth()
+{
+	return first->getDepth();
 }

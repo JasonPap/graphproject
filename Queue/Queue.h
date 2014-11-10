@@ -16,9 +16,10 @@ public:
 	Queue();
 	~Queue();
 	Node* lookupNext();
+	int lookupNextDepth();
 
 	void popNode();
-	void addNode(Node *);
+	void addNode(Node *, int);
 	int getSize();
 
 };
