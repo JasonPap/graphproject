@@ -82,6 +82,7 @@ void GenArray::merge_sort()
     int n = num_of_items;
     void** help_array = (void **) malloc(n * sizeof(void*));
     TopDownSplitMerge(arrayPtr, 0, n, help_array);
+    free(help_array);
 }
 
 void GenArray::CopyArray(void* B[], int iBegin, int iEnd, void* A[])

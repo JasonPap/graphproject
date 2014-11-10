@@ -27,5 +27,5 @@ public:
 	HashMap(int start_size,int bucket_cells);
 	bool insertNode(Node* );
 	void print();
-	ResultSet* reachNodesN(Node*);
+	ResultSet* reachNodesN(int);
 };

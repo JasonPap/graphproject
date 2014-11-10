@@ -159,7 +159,7 @@ Node*  HashMap::lookupNode(int idSearched)
 }
 void HashMap::sort_map()
 {
-    for( int i = 0; i < hashTable->getNumOfItems() ; i++)
+    for( int i = 0; i < hashTable->getSize() ; i++)
     {
         ((GenArray*)hashTable->arrayPtr[i])->merge_sort();
     }
@@ -178,11 +178,21 @@ void HashMap::print()
 bool HashMap::insertEdge(int id, Edge * insEdge)
 {
     Node* temp = lookupNode(id);
-    temp->links->Add(insEdge);
+    if(temp != NULL)
+    {
+        temp->links->Add(insEdge);
+        return true;
+    }
+    else
+        return false;
+
 }
 
-ResultSet* HashMap::reachNodesN(Node* start_node)
+ResultSet* HashMap::reachNodesN(int id)
 {
-    ResultSet* return_set = new ResultSet(start_node);
+    Node* n = lookupNode(id);
+    if(n == NULL)
+        return NULL;
+    ResultSet* return_set = new ResultSet(n);
     return return_set;
 }

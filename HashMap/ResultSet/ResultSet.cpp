@@ -22,7 +22,7 @@ Result* ResultSet::get_next()
         Node* expand_node = nodes_to_expand->lookupNext();
         int depth = nodes_to_expand->lookupNextDepth();
         int expand_node_id = expand_node->get_id();
-
+        cout<<expand_node_id<<endl;
         if (expand_node->links->isEmpty())
         {
             //remove expand node from expand Queue
