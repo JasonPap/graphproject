@@ -8,7 +8,7 @@ ResultSet::ResultSet(Node* n)
     visited_nodes = new list();
     nodes_to_expand = new Queue();
     visited_nodes->Add(n);
-    nodes_to_expand->addNode(n);
+    nodes_to_expand->addNode(n,0);
 }
 
 Result* ResultSet::get_next()
@@ -20,12 +20,13 @@ Result* ResultSet::get_next()
     {
         //get one node from nodes to expand (oxi remove, apla get)
         Node* expand_node = nodes_to_expand->lookupNext();
+        int depth = nodes_to_expand->lookupNextDepth();
         int expand_node_id = expand_node->get_id();
 
         if (expand_node->links->isEmpty())
         {
             //remove expand node from expand Queue
-            nodes_to_expand->getNode();
+            nodes_to_expand->popNode();
         }
         else
         {
@@ -43,14 +44,14 @@ Result* ResultSet::get_next()
                     if(links->next() == false) ///na ginei elenxos
                     ///an telos tis listas tote break
                     {
-                        nodes_to_expand->getNode();//remove node
+                        nodes_to_expand->popNode();//remove node
                         break;
                     }
                 }
                 else
                 {///else add it to visited and to nodes to expand
                     visited_nodes->Add(new_node);
-                    nodes_to_expand->addNode(new_node);
+                    nodes_to_expand->addNode(new_node,depth + 1);
 
                     int distance = depth + 1;
                     return_value = new Result(new_node_id,distance);

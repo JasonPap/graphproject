@@ -26,7 +26,6 @@ public:
 	Node * lookupNode(int );
 	HashMap(int start_size,int bucket_cells);
 	bool insertNode(Node* );
-	bool insertEdge();
 	void print();
 	ResultSet* reachNodesN(Node*);
 };
