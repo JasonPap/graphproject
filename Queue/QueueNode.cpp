@@ -1,4 +1,7 @@
 #include "QueueNode.h"
+#include <iostream>
+
+using namespace std;
 
 QueueNode::QueueNode(Node * _komvos, QueueNode * previous )
 {
@@ -19,17 +22,17 @@ Node * QueueNode::returnNode()
 	return komvos;
 }
 
-Node * QueueNode::getNext()
+QueueNode * QueueNode::getNext()
 {
-	return next;
+	return nextInQueue;
 }
 
-void QueueNode::setPrev(Node * tempPrev)
+void QueueNode::setPrev(QueueNode * tempPrev)
 {
 	previousInQueue = tempPrev;
 }
 
-void QueueNode::setNext(Node * tempNext)
+void QueueNode::setNext(QueueNode * tempNext)
 {
 	nextInQueue = tempNext;
 }

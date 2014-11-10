@@ -1,4 +1,7 @@
+#ifndef QUEUENODE_H
+#define QUEUENODE_H
 
+#include "../Node/Node.h"
 
 class QueueNode
 {
@@ -13,8 +16,9 @@ public:
 	QueueNode(Node* _komvos, QueueNode * prev);
 	~QueueNode();
 	Node * returnNode();
-	Node * getNext();
-	void setPrev();
-	void setNext();
+	QueueNode * getNext();
+	void setPrev(QueueNode *);
+	void setNext(QueueNode *);
 
 };
+#endif

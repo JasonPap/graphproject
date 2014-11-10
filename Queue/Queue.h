@@ -1,10 +1,13 @@
+#ifndef QUEUE_H
+#define QUEUE_H
 
+#include "QueueNode.h"
 
 class Queue
 {
 private:
 
-	QueueNode * first, last;
+	QueueNode *first, *last;
 	int size;
 
 public:
@@ -12,7 +15,10 @@ public:
 	Queue();
 	~Queue();
 	Node* lookupNext();
-	Node* getNode();
+	void popNode();
 	void addNode(Node *);
+	int getSize();
 
 };
+
+#endif

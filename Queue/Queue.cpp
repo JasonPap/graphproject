@@ -1,4 +1,7 @@
 #include "Queue.h"
+#include <iostream>
+
+using namespace std;
 
 Queue::Queue()
 {
@@ -16,16 +19,16 @@ Queue::~Queue()
 Node * Queue::lookupNext()
 {
 	if (size != 0)
-		return (returnNode);
+		return (first->returnNode());
 	else
 		return NULL;
 }
 
-Node * Queue::getNode()
+void Queue::popNode()
 {
 	if (size != 0)
 	{
-		Node * temp = first->returnNode();
+		
 		QueueNode * tempQN = first;
 
 		first = first->getNext();
@@ -33,21 +36,18 @@ Node * Queue::getNode()
 		first->setPrev(NULL);
 
 		delete tempQN;
+	}
 
-		return temp;
-	}
-	else
-	{
-		return NULL;
-	}
+	return;
 
 }
 
 void Queue::addNode(Node * temp)
 {
 
-	Node * tempL = new QueueNode(temp, last);
-	last->setNext(tempL);
+	QueueNode * tempL = new QueueNode(temp, last);
+	if( size != 0 )
+		last->setNext(tempL);
 	last = tempL;
 	if (size == 0)
 	{
@@ -55,4 +55,9 @@ void Queue::addNode(Node * temp)
 	}
 	size++;
 
+}
+
+int Queue::getSize()
+{
+	return size;
 }
