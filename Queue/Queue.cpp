@@ -24,10 +24,12 @@ Node * Queue::lookupNext()
 		return NULL;
 }
 
+
 void Queue::popNode()
 {
 	if (size != 0)
 	{
+
 		
 		QueueNode * tempQN = first;
 
@@ -36,7 +38,9 @@ void Queue::popNode()
 		first->setPrev(NULL);
 
 		delete tempQN;
+
 	}
+
 
 	return;
 
@@ -44,6 +48,7 @@ void Queue::popNode()
 
 void Queue::addNode(Node * temp)
 {
+
 
 	QueueNode * tempL = new QueueNode(temp, last);
 	if( size != 0 )
