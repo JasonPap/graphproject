@@ -12,7 +12,7 @@ class ResultSet
 private:
     list* visited_nodes;
     Queue* nodes_to_expand;  ///alagh list se fifo queue
-
+    bool contains(list*,int);
 public:
     ResultSet(Node*);
     ~ResultSet();

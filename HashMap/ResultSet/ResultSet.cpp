@@ -11,7 +11,7 @@ ResultSet::ResultSet(Node* n)
     nodes_to_expand->addNode(n);
 }
 
-Result* get_next()
+Result* ResultSet::get_next()
 {
     bool searching = true;
     Result* return_value = NULL;
@@ -38,7 +38,7 @@ Result* get_next()
                 Node* new_node = (Node*)links->getData();
                 int new_node_id = new_node->get_id();
 
-                if(visited_nodes->contains(new_node_id))
+                if(contains(visited_nodes,new_node_id))
                 {///if the node pointed is on the visited nodes SKIP
                     if(links->next() == false) ///na ginei elenxos
                     ///an telos tis listas tote break
@@ -72,3 +72,29 @@ Result* get_next()
     return return_value;
 }
 
+bool ResultSet::contains(list* l, int id)
+{
+    if(l->isEmpty())
+        return false;
+    listIterator* it = l->getIterator();
+    bool found = false;
+    while(!found)
+    {
+        Node* n = (Node*)it->getData();
+        if(n->get_id()==id)
+        {
+            delete(it);
+            return true;
+        }
+        else
+        {
+            if(it->next() == false)
+            {
+                delete(it);
+                return false;
+            }
+
+        }
+
+    }
+}
