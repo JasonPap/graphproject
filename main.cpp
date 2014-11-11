@@ -9,47 +9,68 @@ using namespace std;
 
 int main(void)
 {
-	int i;
-	HashMap* xartis = new HashMap(4,4);
-    cout << "split_index = "<<xartis->split_index<<endl;
-    cout << "original_size = "<<xartis->original_size<<endl;
-    cout << "round = "<<xartis->round<<endl;
-    cout << "bucket_cells = "<<xartis->bucket_cells<<endl;
 
-    Node* komvos;
-    
-    for( i = 99 ; i > 0 ; i-- )
+    if (true)
     {
-		komvos = new Node(i);
-		xartis->insertNode(komvos);
-	}
-	
-    //xartis->print();
 
-	
-    
-    xartis->sort_map();
 
-	cout << "split_index = "<<xartis->split_index<<endl;
-    cout << "original_size = "<<xartis->original_size<<endl;
-    cout << "round = "<<xartis->round<<endl;
-    cout<<"Num of bucekts = " << xartis->hashTable->getSize() << endl;
-    
-    /*Edge* e = new Edge(1,NULL);
-    xartis->insertEdge(11,e);
+        HashMap* xartis = new HashMap(4,4);
+        cout << "split_index = "<<xartis->split_index<<endl;
+        cout << "original_size = "<<xartis->original_size<<endl;
+        cout << "round = "<<xartis->round<<endl;
+        cout << "bucket_cells = "<<xartis->bucket_cells<<endl;
 
-    ResultSet* r = xartis->reachNodesN(11);
-    Result* result = r->get_next();
-    result->print();
+        Node* komvos = new Node(1);
+        xartis->insertNode(komvos);
+        komvos = new Node(15);
+        xartis->insertNode(komvos);
+        komvos = new Node(8);
+        xartis->insertNode(komvos);
+        komvos = new Node(3);
+        xartis->insertNode(komvos);
+        komvos = new Node(7);
+        xartis->insertNode(komvos);
+        komvos = new Node(19);
+        xartis->insertNode(komvos);
+        komvos = new Node(12);
+        xartis->insertNode(komvos);
 
-    cout<<endl;*/
+        komvos = new Node(11);
+        xartis->insertNode(komvos);
 
-    //xartis->print();
+        xartis->print();
 
-	cout << "split_index = "<<xartis->split_index<<endl;
-    cout << "original_size = "<<xartis->original_size<<endl;
-    cout << "round = "<<xartis->round<<endl;
-    cout<<"Num of bucekts = " << xartis->hashTable->getSize() << endl;
 
+
+
+        cout<<xartis->hashTable->getNumOfItems()<<endl;
+        xartis->sort_map();
+
+        Edge* e = new Edge(1,NULL);
+        xartis->insertEdge(11,e);
+
+        e = new Edge(12,NULL);
+        xartis->insertEdge(1,e);
+
+        ResultSet* r = xartis->reachNodesN(11);
+        Result* result = r->get_next();
+        result = r->get_next();
+        result->print();
+
+        cout<<endl;
+
+        xartis->print();
+
+    }
+    else
+    {
+        list* l = new list();
+        Node* komvos = new Node(1);
+        l->Add(komvos);
+        listIterator* it = l->getIterator();
+        Node* n = (Node*)it->getData();
+        cout<<n->get_id()<<endl;
+
+    }
 	//list* liiiiist = new list();
 }

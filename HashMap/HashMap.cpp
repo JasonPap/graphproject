@@ -195,6 +195,6 @@ ResultSet* HashMap::reachNodesN(int id)
     Node* n = lookupNode(id);
     if(n == NULL)
         return NULL;
-    ResultSet* return_set = new ResultSet(n);
+    ResultSet* return_set = new ResultSet(n,this);
     return return_set;
 }

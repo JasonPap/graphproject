@@ -3,8 +3,9 @@
 
 using namespace std;
 
-ResultSet::ResultSet(Node* n)
+ResultSet::ResultSet(Node* n,HashMap* h)
 {
+    hashmap = h;
     visited_nodes = new list();
     nodes_to_expand = new Queue();
     visited_nodes->Add(n);
@@ -36,8 +37,10 @@ Result* ResultSet::get_next()
 
             while(!unvisited_node_found)
             {
-                Node* new_node = (Node*)links->getData();
-                int new_node_id = new_node->get_id();
+                Edge* new_edge = (Edge*)links->getData();
+                int new_node_id = new_edge->edge_end;
+                Node* new_node = hashmap->lookupNode(new_node_id);
+                cout<<links->next()<<endl;
 
                 if(contains(visited_nodes,new_node_id))
                 {///if the node pointed is on the visited nodes SKIP

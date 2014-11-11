@@ -1,8 +1,13 @@
+#ifndef HASHMAP_H
+#define HASHMAP_H
+
 #include "../GenArray/GenArray.h"
 #include "../Node/Node.h"
 #include "../Edge/Edge.h"
 #include "./ResultSet/ResultSet.h"
 #include "./ResultSet/Result.h"
+
+class ResultSet;
 
 class HashMap
 {
@@ -30,3 +35,5 @@ public:
 	void print();
 	ResultSet* reachNodesN(int);
 };
+
+#endif
