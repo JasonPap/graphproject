@@ -15,7 +15,7 @@ HashMap::HashMap(int start_size, int _bucket_cells)
 	}
 	split_index = 0;
 	round = 0;
-	original_size = start_size;
+	original_size = size = start_size;
 	bucket_cells = _bucket_cells;
 }
 
@@ -49,11 +49,13 @@ bool HashMap::insertNode(Node* new_node)
 	//hashTable->arrayPtr[bucket_num]->doubleCells();
 	//if(!insert_to_array(new_node,hashTable->arrayPtr[bucket_num]))
     //    cout<<"Errrrrrrrrrrrrrrroorrrr"<<endl;
+    
+    
     if(insert_into_array(new_node,(GenArray*)hashTable->arrayPtr[bucket_num]))
     {
         split();
     }
-    cout<<"inserted node with ID: "<<new_node->get_id()<<endl;
+    
 	////.....
 }
 
@@ -89,9 +91,9 @@ bool HashMap::split()
     hashTable->arrayPtr[split_index] = p_bucket;
 
     split_index++;
-    if(split_index > original_size)
+    if(split_index > size)
     {
-        original_size = original_size * 2;
+        size = size * 2;
         split_index = 0;
         round++;
     }
@@ -169,9 +171,9 @@ void HashMap::print()
 {
     for( int i = 0; i < hashTable->getSize() ; i++)
     {
-        cout<<"row["<<i<<"]:  ";
+        //cout<<"row["<<i<<"]:  ";
         ((GenArray*)hashTable->arrayPtr[i])->print();
-        cout<<endl;
+        //cout<<endl;
     }
 }
 

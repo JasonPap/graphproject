@@ -2,6 +2,7 @@
 #include "../Node/Node.h"
 #include "../Edge/Edge.h"
 #include "./ResultSet/ResultSet.h"
+#include "./ResultSet/Result.h"
 
 class HashMap
 {
@@ -9,7 +10,7 @@ class HashMap
 //private:
 public:
 	int split_index;
-	int original_size;
+	int original_size, size;
 	int round;
 	int bucket_cells; //number of cells per bucket at start
 	GenArray* hashTable;
