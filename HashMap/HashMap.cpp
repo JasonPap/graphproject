@@ -1,5 +1,6 @@
 #include <iostream>
 #include "HashMap.h"
+#include "ResultSet/Result.h"
 #include <math.h>
 
 using namespace std;
@@ -202,11 +203,12 @@ ResultSet* HashMap::reachNodesN(int id)
 int HashMap::reachNode1(int from,int to)
 {
     int d = -1;
-    ResultSet* distances = new ResultSet(from,this);
+    Node* from_node = lookupNode(from);
+    ResultSet* distances = new ResultSet(from_node,this);
     bool notfound = true;
     Result* r;
 
-    while(notFound)
+    while(notfound)
     {
         r = distances->get_next();
         if(r == NULL)

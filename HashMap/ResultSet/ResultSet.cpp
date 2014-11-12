@@ -12,6 +12,11 @@ ResultSet::ResultSet(Node* n,HashMap* h)
     nodes_to_expand->addNode(n,0);
 }
 
+ResultSet::~ResultSet()
+{
+    delete(visited_nodes);
+    delete(nodes_to_expand);
+}
 
 Result* ResultSet::get_next()
 {

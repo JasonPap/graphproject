@@ -13,6 +13,13 @@ list::list()
 
 list::~list()
 {
+    while(!isEmpty())
+    {
+        listnode* tmp = first_node->next;
+        delete(first_node);
+        first_node = tmp;
+        length--;
+    }
 }
 
 
