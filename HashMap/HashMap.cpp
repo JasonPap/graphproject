@@ -49,13 +49,13 @@ bool HashMap::insertNode(Node* new_node)
 	//hashTable->arrayPtr[bucket_num]->doubleCells();
 	//if(!insert_to_array(new_node,hashTable->arrayPtr[bucket_num]))
     //    cout<<"Errrrrrrrrrrrrrrroorrrr"<<endl;
-    
-    
+
+
     if(insert_into_array(new_node,(GenArray*)hashTable->arrayPtr[bucket_num]))
     {
         split();
     }
-    
+
 	////.....
 }
 
@@ -197,4 +197,32 @@ ResultSet* HashMap::reachNodesN(int id)
         return NULL;
     ResultSet* return_set = new ResultSet(n,this);
     return return_set;
+}
+
+int HashMap::reachNode1(int from,int to)
+{
+    int d = -1;
+    ResultSet* distances = new ResultSet(from,this);
+    bool notfound = true;
+    Result* r;
+
+    while(notFound)
+    {
+        r = distances->get_next();
+        if(r == NULL)
+        {
+            delete(r);
+            break;
+        }
+
+        if(r->node_id == to)
+        {
+            d = r->distance;
+            notfound = false;
+        }
+
+        delete(r);
+    }
+    delete(distances);
+    return d;
 }

@@ -34,6 +34,7 @@ public:
 	bool insertNode(Node* );
 	void print();
 	ResultSet* reachNodesN(int);
+	int reachNode1(int,int);
 };
 
 #endif

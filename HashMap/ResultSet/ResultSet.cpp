@@ -12,6 +12,7 @@ ResultSet::ResultSet(Node* n,HashMap* h)
     nodes_to_expand->addNode(n,0);
 }
 
+
 Result* ResultSet::get_next()
 {
     bool searching = true;
