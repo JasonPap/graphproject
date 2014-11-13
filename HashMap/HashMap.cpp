@@ -20,6 +20,17 @@ HashMap::HashMap(int start_size, int _bucket_cells)
 	bucket_cells = _bucket_cells;
 }
 
+HashMap::~HashMap()
+{
+    for (int i = 0; i < size; i++)
+	{
+		GenArray* row = (GenArray*)hashTable->arrayPtr[i];
+		row->Empty();
+		delete(row);
+	}
+	delete(hashTable);
+}
+
 int HashMap::hash(int i)
 {
 	int r = i % (int)( pow(2,round) * original_size );

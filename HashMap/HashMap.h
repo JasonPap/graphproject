@@ -31,6 +31,7 @@ public:
 	bool insertEdge(int id, Edge * insEdge);
 	Node * lookupNode(int );
 	HashMap(int start_size,int bucket_cells);
+	~HashMap();
 	bool insertNode(Node* );
 	void print();
 	ResultSet* reachNodesN(int);

@@ -23,7 +23,18 @@ GenArray::~GenArray()
 		if (arrayPtr[i] != NULL)
 			free(arrayPtr[i]);
 	}*/
-	free(arrayPtr);
+	if(arrayPtr!=NULL)
+        free(arrayPtr);
+}
+
+void GenArray::Empty()
+{
+    for(int i = 0; i< num_of_items; i++)
+    {
+        Node* node_to_delete = (Node*)arrayPtr[i];
+        delete(node_to_delete);
+    }
+    num_of_items = 0;
 }
 
 bool GenArray::doubleCells()

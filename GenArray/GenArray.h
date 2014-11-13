@@ -24,7 +24,7 @@ public:
 	int getNumOfItems();
 	int fillIt();
 	bool isFull();
-
+    void Empty();
 	void merge_sort();
 	void print();
 
