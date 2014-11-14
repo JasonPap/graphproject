@@ -11,6 +11,7 @@ listnode::listnode(void* Data)
 
 listnode::~listnode()
 {
+    delete data;
 }
 
 void* listnode::GetValue()

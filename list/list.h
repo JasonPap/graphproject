@@ -11,6 +11,7 @@ public:
 	int getLength();
 	bool isEmpty();
 	listIterator* getIterator();
+	void Empty();
 
 private:
 	int length;

@@ -70,10 +70,12 @@ int main(void)
             if(result != NULL)
             {
                 cout<< result->node_id << "   "<<result->distance<<endl;
+                delete result;
             }
             else
                 break;
         }
+        delete(r);
 
         //result = r->get_next();
         //result->print();
@@ -81,6 +83,8 @@ int main(void)
         cout<<endl;
 
         xartis->print();
+
+        delete xartis;
 
     }
     else

@@ -16,7 +16,10 @@ Node::~Node()
 		delete properties;
 
 	if(links != NULL)
-		delete links;
+    {
+        delete links;
+    }
+
 }
 
 int Node::get_id()
