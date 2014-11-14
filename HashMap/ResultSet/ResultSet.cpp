@@ -14,21 +14,32 @@ ResultSet::ResultSet(Node* n,HashMap* h)
 
 ResultSet::~ResultSet()
 {
-    if(!visited_nodes->isEmpty())
+
+    /*if(!visited_nodes->isEmpty())
     {
+cout<<"2"<<endl;
         listIterator* it = visited_nodes->getIterator();
+cout<<"3"<<endl;
         Node* n = (Node*)it->getData();
+cout<<"4"<<endl;
         delete(n);
+cout<<"5"<<endl;
         while(it->next())
         {
+		cout<<"6"<<endl;
             n = (Node*)it->getData();
+cout<<"7"<<endl;
             delete(n);
+cout<<"8"<<endl;
         }
         delete(it);
-    }
+cout<<"9"<<endl;
+    }*/
 
     delete(visited_nodes);
+
     delete(nodes_to_expand);
+
 }
 
 Result* ResultSet::get_next()

@@ -12,19 +12,10 @@ Queue::Queue()
 
 Queue::~Queue()
 {
-	QueueNode *temp = first, *temp2 = first;
-
-	if( temp == NULL )
-		return;
-	while( (temp = temp->getNext()) != NULL )
-	{
-		delete temp2;
-		temp2 = temp;
-	}
-	delete temp;
-
-	first = NULL;
-	last = NULL;
+	while(size != 0)
+ 	{
+  		popNode();
+ 	}
 }
 
 Node * Queue::lookupNext()
@@ -73,6 +64,7 @@ void Queue::addNode(Node * temp, int depth)
 	if (size == 0)
 	{
 		first = tempL;
+last = tempL;
 	}
 	size++;
 
