@@ -51,7 +51,7 @@ bool GenArray::addCell()
 {
 
 	arrayPtr = (void **) realloc(arrayPtr, (++size * sizeof(void*)) );
-
+	
 	if ( arrayPtr != NULL )
 		return true;
 	else

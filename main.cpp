@@ -38,7 +38,13 @@ int main(void)
         komvos = new Node(11);
         xartis->insertNode(komvos);
 
-        xartis->print();
+	for(int i  = 10000; i>100; i--)
+	{
+		komvos = new Node(i);
+        	xartis->insertNode(komvos);
+	}
+	cout << "round = "<<xartis->round<<endl;
+        //xartis->print();
 
 
 
@@ -82,7 +88,7 @@ int main(void)
 
         cout<<endl;
 
-        xartis->print();
+        //xartis->print();
 
         delete xartis;
 

@@ -76,6 +76,7 @@ bool HashMap::insertNode(Node* new_node)
 bool HashMap::split()
 {
     hashTable->addCell();
+	size++;
     GenArray* newBucket = new GenArray(bucket_cells);
 
     hashTable->arrayPtr[hashTable->getSize()-1] = newBucket;
@@ -105,9 +106,9 @@ bool HashMap::split()
     hashTable->arrayPtr[split_index] = p_bucket;
 
     split_index++;
-    if(split_index > size)
+    if(split_index == ((int)pow(2,round))*original_size)
     {
-        size = size * 2;
+        //size = size * 2;
         split_index = 0;
         round++;
     }
@@ -187,7 +188,7 @@ void HashMap::sort_map()
 
 void HashMap::print()
 {
-    for( int i = 0; i < hashTable->getSize() ; i++)
+    for( int i = 0; i < size ; i++)
     {
         cout<<"row["<<i<<"]:  ";
         ((GenArray*)hashTable->arrayPtr[i])->print();
