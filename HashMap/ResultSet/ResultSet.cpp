@@ -14,6 +14,19 @@ ResultSet::ResultSet(Node* n,HashMap* h)
 
 ResultSet::~ResultSet()
 {
+    if(!visited_nodes->isEmpty())
+    {
+        listIterator* it = visited_nodes->getIterator();
+        Node* n = (Node*)it->getData();
+        delete(n);
+        while(it->getData())
+        {
+            n = (Node*)it->getData();
+            delete(n);
+        }
+        delete(it);
+    }
+
     delete(visited_nodes);
     delete(nodes_to_expand);
 }
