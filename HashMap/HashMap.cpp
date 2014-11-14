@@ -18,6 +18,7 @@ HashMap::HashMap(int start_size, int _bucket_cells)
 	round = 0;
 	original_size = size = start_size;
 	bucket_cells = _bucket_cells;
+	isSorted = false;
 }
 
 HashMap::~HashMap()
@@ -45,6 +46,7 @@ int HashMap::next_hash(int i)
 
 bool HashMap::insertNode(Node* new_node)
 {
+    isSorted = false;
 	int bucket_num = hash(new_node->get_id());
 	if (bucket_num < split_index)
 		bucket_num = next_hash(new_node->get_id());
@@ -135,6 +137,9 @@ bool HashMap::insert_into_array(Node* new_node, GenArray* _array)
 
 Node*  HashMap::lookupNode(int idSearched)
 {
+    if(!isSorted)
+        sort_map();
+
 	int bucket_index = hash(idSearched);
 	int found = 0;
 
@@ -177,15 +182,16 @@ void HashMap::sort_map()
     {
         ((GenArray*)hashTable->arrayPtr[i])->merge_sort();
     }
+    isSorted = true;
 }
 
 void HashMap::print()
 {
     for( int i = 0; i < hashTable->getSize() ; i++)
     {
-        //cout<<"row["<<i<<"]:  ";
+        cout<<"row["<<i<<"]:  ";
         ((GenArray*)hashTable->arrayPtr[i])->print();
-        //cout<<endl;
+        cout<<endl;
     }
 }
 

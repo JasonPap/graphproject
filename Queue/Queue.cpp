@@ -13,7 +13,7 @@ Queue::Queue()
 Queue::~Queue()
 {
 	QueueNode *temp = first, *temp2 = first;
-	
+
 	if( temp == NULL )
 		return;
 	while( (temp = temp->getNext()) != NULL )
@@ -22,7 +22,7 @@ Queue::~Queue()
 		temp2 = temp;
 	}
 	delete temp;
-	
+
 	first = NULL;
 	last = NULL;
 }
@@ -38,10 +38,10 @@ Node * Queue::lookupNext()
 
 void Queue::popNode()
 {
-	if (size != 0)
+	if (size > 1)
 	{
 
-		
+
 		QueueNode * tempQN = first;
 
 		first = first->getNext();
@@ -51,6 +51,11 @@ void Queue::popNode()
 		delete tempQN;
 
 	}
+	else if(size == 1)
+    {
+        size--;
+        delete first;
+    }
 
 
 	return;

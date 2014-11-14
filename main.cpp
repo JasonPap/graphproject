@@ -43,7 +43,7 @@ int main(void)
 
 
 
-        cout<<xartis->hashTable->getNumOfItems()<<endl;
+        cout<<endl<<"size "<<xartis->hashTable->getSize()<<endl;
         xartis->sort_map();
 
         Edge* e = new Edge(1,NULL);
@@ -52,10 +52,31 @@ int main(void)
         e = new Edge(12,NULL);
         xartis->insertEdge(1,e);
 
+        e = new Edge(3,NULL);
+        xartis->insertEdge(12,e);
+
+        e = new Edge(19,NULL);
+        xartis->insertEdge(3,e);
+
+        e = new Edge(19,NULL);
+        xartis->insertEdge(1,e);
+
+        //cout<<"h apostasi einai: "<<xartis->reachNode1(1,19);
+
         ResultSet* r = xartis->reachNodesN(11);
-        Result* result = r->get_next();
-        result = r->get_next();
-        result->print();
+        while(true)
+        {
+            Result* result = r->get_next();
+            if(result != NULL)
+            {
+                cout<< result->node_id << "   "<<result->distance<<endl;
+            }
+            else
+                break;
+        }
+
+        //result = r->get_next();
+        //result->print();
 
         cout<<endl;
 

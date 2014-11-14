@@ -25,9 +25,10 @@ public:
 
 	bool insert_into_array(Node*,GenArray*);
 	bool split();
-	void sort_map();
-public:
+	bool isSorted;
 
+public:
+    void sort_map();
 	bool insertEdge(int id, Edge * insEdge);
 	Node * lookupNode(int );
 	HashMap(int start_size,int bucket_cells);
