@@ -19,7 +19,7 @@ ResultSet::~ResultSet()
         listIterator* it = visited_nodes->getIterator();
         Node* n = (Node*)it->getData();
         delete(n);
-        while(it->getData())
+        while(it->next())
         {
             n = (Node*)it->getData();
             delete(n);

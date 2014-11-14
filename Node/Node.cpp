@@ -23,7 +23,7 @@ Node::~Node()
             listIterator* it = links->getIterator();
             Edge* e = (Edge*)it->getData();
             delete(e);
-            while(it->getData())
+            while(it->next())
             {
                 e = (Edge*)it->getData();
                 delete(e);
