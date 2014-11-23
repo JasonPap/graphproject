@@ -1,16 +1,18 @@
-TopDownMergeSort(A[], B[], n)
+void MergeSort(int A[],int n)
 {
+    int* B = (int*) malloc(n*sizeof(int));
     TopDownSplitMerge(A, 0, n, B);
+    free(B);
 }
 
-CopyArray(B[], iBegin, iEnd, A[])
+void CopyArray(int B[], int iBegin, int iEnd, int A[])
 {
     for(k = iBegin; k < iEnd; k++)
         A[k] = B[k];
 }
 
 // iBegin is inclusive; iEnd is exclusive (A[iEnd] is not in the set)
-TopDownSplitMerge(A[], iBegin, iEnd, B[])
+void TopDownSplitMerge(int A[],int iBegin, int iEnd, int B[])
 {
     if(iEnd - iBegin < 2)                       // if run size == 1
         return;                                 //   consider it sorted
@@ -25,7 +27,7 @@ TopDownSplitMerge(A[], iBegin, iEnd, B[])
 
 //  left half is A[iBegin :iMiddle-1]
 // right half is A[iMiddle:iEnd-1   ]
-TopDownMerge(A[], iBegin, iMiddle, iEnd, B[])
+void TopDownMerge(int A[], int iBegin, int iMiddle, int iEnd, int B[])
 {
     i0 = iBegin, i1 = iMiddle;
 
