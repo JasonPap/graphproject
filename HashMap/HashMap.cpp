@@ -24,7 +24,7 @@ HashMap::HashMap(int start_size, int _bucket_cells)
 	number_of_edges = 0;
 	number_of_nodes = 0;
 	diameter = -1;
-	averagePathLength = 0;
+	averagePathLength = 0.0;
 }
 
 HashMap::~HashMap()
@@ -267,14 +267,14 @@ void HashMap::degreeDistribution()
 
     for(int i =0; i < size; i++)
     {
-        for(j=0; j < hashTable[i]->getNumOfItems(); j++)
+        for(int j=0; j < hashTable[i]->getNumOfItems(); j++)
         {
             degree_array[0][z] = ((Node*)hashTable[i]->arrayPtr[j])->get_id();
             z++;
         }
     }
 
-    MergeSort(degree_array[0]);
+    MergeSort(degree_array[0],number_of_nodes);
 
     for(int i = 0; i< number_of_nodes; i++)
     {
@@ -311,9 +311,10 @@ void HashMap::degreeDistribution()
 			z++;
 		}
 	}
-	MergeSort(result);
+
 	return result;
 }
+
 int HashMap::diameter()
 {
     if(diameter == -1)
@@ -357,6 +358,51 @@ double HashMap::averagePathLength()
     diameter = max_distance;
 
     averagePathLength = (double)sumOfDistances/(double)numOfPaths;
+    delete(node_IDs);
+
     return averagePathLength;
 }
+
+int HashMap::numberOfCCs()
+{
+    int connectedComponents = 0;
+    int* node_IDs = getAllNodeIds();
+    MergeSort(node_IDs,number_of_nodes);
+    bool* visited = new bool[number_of_nodes];
+
+    for(int i = 0; i < number_of_nodes; i++)
+    {
+        visited[i] = false;
+    }
+
+    for(int i = 0; i < number_of_nodes; i++)
+    {
+        if(visited[i] == false)
+        {
+            FindCC(visited,i,node_IDs);
+            connectedComponents++;
+        }
+    }
+
+    delete(node_IDs);
+    delete(visited);
+    return connectedComponents;
+}
+
+void HashMap::FindCC(bool* visited,int index,int* node_IDs)
+{
+    ResultSet* results = reachNodesN(node_IDs[index]);
+    visited[index] = true;
+    Result* result;
+
+    while((result = results->get_next()) != NULL)
+    {
+        int visited_node_id = result->node_id;
+        int index = binarySearch(node_IDs,number_of_nodes,visited_node_id);
+        visited[index] = true;
+        delete(result);
+    }
+    delete(results);
+}
+
 

@@ -27,6 +27,7 @@ private:
 
 	int hash(int );
 	int next_hash(int );
+	void FindCC(bool* visited);
 
 	bool insert_into_array(Node*,GenArray*);
 	bool split();
@@ -43,9 +44,10 @@ public:
 	ResultSet* reachNodesN(int);
 	int reachNode1(int,int);
 	void degreeDistribution();
-	int * getAllNodeIds()
+	int * getAllNodeIds();
 	int diameter();
 	double averagePathLength();
+	int numberOfCCs();
 };
 
 #endif
