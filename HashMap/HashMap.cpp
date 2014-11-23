@@ -267,9 +267,9 @@ void HashMap::degreeDistribution()
 
     for(int i =0; i < size; i++)
     {
-        for(int j=0; j < hashTable[i]->getNumOfItems(); j++)
+        for(int j=0; j < ((GenArray*)hashTable->arrayPtr[i])->getNumOfItems(); j++)
         {
-            degree_array[0][z] = ((Node*)hashTable[i]->arrayPtr[j])->get_id();
+            degree_array[0][z] = ((Node*)((GenArray*)hashTable->arrayPtr[i])->arrayPtr[j])->get_id();
             z++;
         }
     }
@@ -293,10 +293,10 @@ void HashMap::degreeDistribution()
         while(lit->next()!=NULL);
         delete(lit);
     }
-    #summon Gnu Plot Spirit
+    //#summon Gnu Plot Spirit
 }
 
-(int *)HashMap::getAllNodeIds()
+int* HashMap::getAllNodeIds()
 {
 	int i,j;
 	int z = 0;
@@ -305,9 +305,9 @@ void HashMap::degreeDistribution()
 
 	for (i = 0; i < size ; i++)
 	{
-		for (j = 0; j < hashTable[i]->getNumOfItems(); j++)
+		for (j = 0; j < ((GenArray*)hashTable->arrayPtr[i])->getNumOfItems(); j++)
 		{
-			result[z] = ((Node*)hashTable[i]->arrayPtr[j])->get_id();
+			result[z] = ((Node*)((GenArray*)hashTable->arrayPtr[i])->arrayPtr[j])->get_id();
 			z++;
 		}
 	}
@@ -315,15 +315,15 @@ void HashMap::degreeDistribution()
 	return result;
 }
 
-int HashMap::diameter()
+int HashMap::Diameter()
 {
     if(diameter == -1)
-        averagePathLength();
+        AveragePathLength();
 
     return diameter;
 }
 
-double HashMap::averagePathLength()
+double HashMap::AveragePathLength()
 {
     int max_distance = 0;
     int* node_IDs = getAllNodeIds();
@@ -389,8 +389,9 @@ int HashMap::numberOfCCs()
     return connectedComponents;
 }
 
-void HashMap::FindCC(bool* visited,int index,int* node_IDs)
+int HashMap::FindCC(bool* visited,int index,int* node_IDs)
 {
+    int CCsize = 0;
     ResultSet* results = reachNodesN(node_IDs[index]);
     visited[index] = true;
     Result* result;
@@ -400,9 +401,58 @@ void HashMap::FindCC(bool* visited,int index,int* node_IDs)
         int visited_node_id = result->node_id;
         int index = binarySearch(node_IDs,number_of_nodes,visited_node_id);
         visited[index] = true;
+        CCsize++;
         delete(result);
     }
     delete(results);
+    return CCsize;
+}
+
+int HashMap::maxCC()
+{
+    int maxConnectedComponent = 0;
+
+    int* node_IDs = getAllNodeIds();
+    MergeSort(node_IDs,number_of_nodes);
+    bool* visited = new bool[number_of_nodes];
+
+    for(int i = 0; i < number_of_nodes; i++)
+    {
+        visited[i] = false;
+    }
+
+    for(int i = 0; i < number_of_nodes; i++)
+    {
+        if(visited[i] == false)
+        {
+            int x = FindCC(visited,i,node_IDs);
+            if(x  > maxConnectedComponent)
+                maxConnectedComponent = x;
+        }
+    }
+
+    delete(node_IDs);
+    delete(visited);
+    return maxConnectedComponent;
+}
+
+double HashMap::density()
+{
+    return (double)(2*(double)number_of_edges)/((double)number_of_nodes * ((double)(number_of_nodes - 1)));
+}
+
+double HashMap::closenessCentrality(Node* n)
+{
+    ResultSet* results = reachNodesN(n->get_id());
+    double total = 0;
+    Result* result;
+    while((result = results->get_next() )!= NULL)
+    {
+        total += 1/result->distance;
+        delete(result);
+    }
+    total = total/(number_of_nodes-1);
+    return total;
 }
 
 
