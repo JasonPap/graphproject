@@ -2,6 +2,8 @@
 #include "HashMap.h"
 #include "ResultSet/Result.h"
 #include <math.h>
+#include "../Data_Operations/BinarySearch.h"
+#include "../Data_Operations/MergeSort.h"
 
 using namespace std;
 
@@ -255,6 +257,11 @@ void HashMap::degreeDistribution()
 {
     int degree_array[2][number_of_nodes];
     int z = 0;
+    //int
+    for(int i = 0; i< number_of_nodes; i++)
+    {
+        degree_array[1][i] = 0;
+    }
 
     for(int i =0; i < size; i++)
     {
@@ -265,7 +272,26 @@ void HashMap::degreeDistribution()
         }
     }
 
+    MergeSort(degree_array[0]);
 
+    for(int i = 0; i< number_of_nodes; i++)
+    {
+        Node* n = lookupNode(degree_array[0][i]);
+        if(n->links->isEmpty())
+            continue;
+
+        listIterator* lit = n->links->getIterator();
+        do
+        {
+            int link_id = ((Node*)lit->getData())->get_id();
+            degree_array[1][i]++;
+            int index = binarySearch(degree_array[0],number_of_nodes,link_id);
+            degree_array[1][index]++;
+        }
+        while(lit->next()!=NULL);
+        delete(lit);
+    }
+    #summon Gnu Plot Spirit
 }
 
 
