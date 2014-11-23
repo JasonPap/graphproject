@@ -19,6 +19,8 @@ HashMap::HashMap(int start_size, int _bucket_cells)
 	original_size = size = start_size;
 	bucket_cells = _bucket_cells;
 	isSorted = false;
+	number_of_edges = 0;
+	number_of_nodes = 0;
 }
 
 HashMap::~HashMap()
@@ -46,6 +48,7 @@ int HashMap::next_hash(int i)
 
 bool HashMap::insertNode(Node* new_node)
 {
+    number_of_nodes++;
     isSorted = false;
 	int bucket_num = hash(new_node->get_id());
 	if (bucket_num < split_index)
@@ -202,6 +205,7 @@ bool HashMap::insertEdge(int id, Edge * insEdge)
     if(temp != NULL)
     {
         temp->links->Add(insEdge);
+        number_of_edges++;
         return true;
     }
     else
@@ -246,3 +250,22 @@ int HashMap::reachNode1(int from,int to)
     delete(distances);
     return d;
 }
+
+void HashMap::degreeDistribution()
+{
+    int degree_array[2][number_of_nodes];
+    int z = 0;
+
+    for(int i =0; i < size; i++)
+    {
+        for(j=0; j < hashTable[i]->getNumOfItems(); j++)
+        {
+            degree_array[0][z] = ((Node*)hashTable[i]->arrayPtr[j])->get_id();
+            z++;
+        }
+    }
+
+
+}
+
+

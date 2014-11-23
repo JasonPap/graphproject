@@ -12,13 +12,15 @@ class ResultSet;
 class HashMap
 {
 
-//private:
-public:
+private:
 	int split_index;
 	int original_size, size;
 	int round;
 	int bucket_cells; //number of cells per bucket at start
 	GenArray* hashTable;
+
+	int number_of_edges;
+	int number_of_nodes;
 
 	int hash(int );
 	int next_hash(int );
@@ -37,6 +39,7 @@ public:
 	void print();
 	ResultSet* reachNodesN(int);
 	int reachNode1(int,int);
+	void degreeDistribution();
 };
 
 #endif
