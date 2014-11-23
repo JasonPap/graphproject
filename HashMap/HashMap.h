@@ -22,6 +22,9 @@ private:
 	int number_of_edges;
 	int number_of_nodes;
 
+	int diameter;
+	double averagePathLength;
+
 	int hash(int );
 	int next_hash(int );
 
@@ -41,7 +44,8 @@ public:
 	int reachNode1(int,int);
 	void degreeDistribution();
 	int * getAllNodeIds()
-
+	int diameter();
+	double averagePathLength();
 };
 
 #endif

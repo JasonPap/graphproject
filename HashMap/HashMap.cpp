@@ -23,6 +23,8 @@ HashMap::HashMap(int start_size, int _bucket_cells)
 	isSorted = false;
 	number_of_edges = 0;
 	number_of_nodes = 0;
+	diameter = -1;
+	averagePathLength = 0;
 }
 
 HashMap::~HashMap()
@@ -312,5 +314,49 @@ void HashMap::degreeDistribution()
 	MergeSort(result);
 	return result;
 }
+int HashMap::diameter()
+{
+    if(diameter == -1)
+        averagePathLength();
 
+    return diameter;
+}
+
+double HashMap::averagePathLength()
+{
+    int max_distance = 0;
+    int* node_IDs = getAllNodeIds();
+
+    int sumOfDistances;
+    int numOfPaths;
+
+    for(int i = 0; i < number_of_nodes; i++)
+    {
+        ResultSet* results = reachNodesN(node_IDs[i]);
+
+        while(true)
+        {
+            Result* result = results->get_next();
+            if(result != NULL)
+            {
+                //cout<<"Distance from " << start << " to " << result->node_id << " -----> "<<result->distance<<endl;
+                sumOfDistances += result->distance;
+                numOfPaths++;
+
+                if(result->distance > max_distance)
+                    max_distance = result->distance;
+
+                delete result;
+            }
+            else
+                break;
+        }
+        delete(results);
+    }
+
+    diameter = max_distance;
+
+    averagePathLength = (double)sumOfDistances/(double)numOfPaths;
+    return averagePathLength;
+}
 
