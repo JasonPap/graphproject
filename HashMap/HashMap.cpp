@@ -294,4 +294,23 @@ void HashMap::degreeDistribution()
     #summon Gnu Plot Spirit
 }
 
+(int *)HashMap::getAllNodeIds()
+{
+	int i,j;
+	int z = 0;
+
+	int* result = new int[number_of_nodes];
+
+	for (i = 0; i < size ; i++)
+	{
+		for (j = 0; j < hashTable[i]->getNumOfItems(); j++)
+		{
+			result[z] = ((Node*)hashTable[i]->arrayPtr[j])->get_id();
+			z++;
+		}
+	}
+	MergeSort(result);
+	return result;
+}
+
 

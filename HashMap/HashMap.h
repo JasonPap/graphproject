@@ -40,6 +40,8 @@ public:
 	ResultSet* reachNodesN(int);
 	int reachNode1(int,int);
 	void degreeDistribution();
+	int * getAllNodeIds()
+
 };
 
 #endif
