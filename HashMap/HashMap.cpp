@@ -185,6 +185,7 @@ Node*  HashMap::lookupNode(int idSearched)
 	}
 	return NULL;
 }
+
 void HashMap::sort_map()
 {
     for( int i = 0; i < hashTable->getSize() ; i++)
@@ -286,7 +287,8 @@ void HashMap::degreeDistribution()
         listIterator* lit = n->links->getIterator();
         do
         {
-            int link_id = ((Node*)lit->getData())->get_id();
+            ///vvv apokatw exoume lista apo edges kai oxi apo nodes vvv
+            int link_id = ((Edge*)lit->getData())->edge_end;
             degree_array[1][i]++;
             int index = binarySearch(degree_array[0],number_of_nodes,link_id);
             degree_array[1][index]++;
