@@ -4,6 +4,7 @@
 #include <math.h>
 #include "../Data_Operations/BinarySearch.h"
 #include "../Data_Operations/MergeSort.h"
+#include "../Data_Operations/FloydWarshall.h"
 
 using namespace std;
 
@@ -453,6 +454,66 @@ double HashMap::closenessCentrality(Node* n)
     }
     total = total/(number_of_nodes-1);
     return total;
+}
+
+int HashMap::getNumOfNodes()
+{
+    return number_of_nodes;
+}
+
+double HashMap::betweennessCentrality(Node* n)
+{
+    int nodeId = n->get_id();
+    int **dist, **next;
+    int searchIndex;
+    int timesFound = 0, numOfPaths=0;
+
+
+    floydWarshall(this, dist, next);
+
+    int * nodeIds = getAllNodeIds();
+
+    for( int i = 0 ; i < number_of_nodes ; i++ )
+    {
+        if( nodeId == nodeIds[i] )
+        {
+            searchIndex = i;
+            break;
+        }
+    }
+
+    for( int i = 0 ; i < number_of_nodes ; i++)
+    {
+        for( int j = 0 ; j < number_of_nodes ; j++) {
+            list *path = getFloydPath(next, i, j );
+            if( path->isEmpty())
+            {
+                delete path;
+                continue;
+            }
+            else
+            {
+                numOfPaths++;
+                listIterator *li = path->getIterator();
+
+                do{
+                    if( (int)li->getData() == searchIndex )
+                    {
+                        timesFound++;
+                        break;
+                    }
+                }while(li->next()!= NULL);
+
+                delete li;
+                delete path;
+            }
+        }
+
+    }
+    double result = ((double)timesFound/(double)numOfPaths);
+    result = (result/(double)(((number_of_nodes-2)*(number_of_nodes-1))/2));
+    return  result;
+
 }
 
 

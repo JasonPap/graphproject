@@ -50,6 +50,9 @@ public:
 	int numberOfCCs();
 	int maxCC();
 	double density();
+	double closenessCentrality(Node* n);
+	double betweennessCentrality(Node* n);
+	int getNumOfNodes();
 };
 
 #endif
