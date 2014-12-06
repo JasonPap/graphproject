@@ -1,13 +1,14 @@
 import datetime
+from FileOperations import *
+
 
 def match_suggestion(person_knows, person_lives, person_studies, person_works, node_id, interests, hops, age_diff, limit):
 
-    if node_id not in graph.dictionary:
+    if node_id not in person_knows.dictionary:
         print 'Node ' + node_id + ' is not in the graph'
-        return -1
+        return []
 
-
-    bfs_generator = person_knows.graph_bfs(node)
+    bfs_generator = person_knows.graph_bfs(node_id)
     recommendations = []
 
     for result in bfs_generator:
@@ -17,9 +18,21 @@ def match_suggestion(person_knows, person_lives, person_studies, person_works, n
     recommendations = filter_gender(node_id, person_knows, recommendations)
     recommendations = filter_age(node_id, person_knows, recommendations, age_diff)
     recommendations = filter_places(node_id, person_lives, person_studies, person_works, recommendations)
-    final = filter_interests(node_id, person_knows, recommendations, interests)
+    recommendations = filter_interests(node_id, person_knows, recommendations, interests)
+
+    return score_candidates(node_id, person_knows, recommendations, limit)
 
 
+def score_candidates(node_id, person_knows, recommendation, limit):
+    interest_number = len(person_knows.lookup_node(node_id).interests)
+    recommendation.sort()
+    final = []
+    for candidate in recommendation[:limit]:
+        temp_interest_num = len(person_knows.lookup_node(candidate[1]).interests)
+        score = float(candidate[0])/float(temp_interest_num + interest_number - candidate[0])
+        final.append((candidate[1], score))
+
+    return final
 
 
 def filter_gender(node_id, person_knows, recommendations):
@@ -32,6 +45,7 @@ def filter_gender(node_id, person_knows, recommendations):
             recommendations.remove(temp_node)
 
     return recommendations
+
 
 def filter_age(node_id, person_knows, recommendations, age_diff):
 
@@ -47,7 +61,12 @@ def filter_age(node_id, person_knows, recommendations, age_diff):
 
     return recommendations
 
+
 def filter_places(node_id, person_lives, person_studies, person_works, recommendations):
+
+    person_studies_r = create_reverse_graph_from_file("person_studyAt_organisation.csv")
+    person_works_r = create_reverse_graph_from_file("person_workAt_organisation.csv")
+    person_lives_r = create_reverse_graph_from_file("person_isLocatedIn_place.csv")
 
     bfs_gen = person_lives.bfs_graph(node_id)          #oi perioxes poy menei o node
     city_living = []
@@ -73,8 +92,8 @@ def filter_places(node_id, person_lives, person_studies, person_works, recommend
     all_in_jobs = []
     for job in work_places:
         bfs_gen = person_works_r.bfs_graph(job)
-        for empl in bfs_gen:
-            all_in_jobs.append(empl[0])
+        for employee in bfs_gen:
+            all_in_jobs.append(employee[0])
 
     all_in_cities = []
     for city in city_living:
@@ -88,8 +107,16 @@ def filter_places(node_id, person_lives, person_studies, person_works, recommend
 
     return recommendations
 
-def filter_interests(node_id, person_knows, recommendations, num_of_interests):
 
+def filter_interests(node_id, person_knows, recommendations, num_of_interests):
+    """
+    perigrafi
+    :param node_id:
+    :param person_knows:
+    :param recommendations:
+    :param num_of_interests:
+    :return:
+    """
     final = []
     b_node = person_knows.lookup_node(node_id)
     interests = b_node.intersts
@@ -100,6 +127,6 @@ def filter_interests(node_id, person_knows, recommendations, num_of_interests):
             if interest in interests:
                 common += 1
         if common > num_of_interests:
-            final.append((pers,common))
+            final.append((common, pers))
 
     return final
