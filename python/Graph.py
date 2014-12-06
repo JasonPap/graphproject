@@ -69,7 +69,7 @@ class Graph:
 
     def reach_node_1(self, start, end):
         """
-        Return the length of the min path from start to end nodes, if there is no path return -1
+        Return the length of the min path from start to end nodes, if there is no path return -1. Use BFS algorithm.
         :param start: int
         :param end: int
         :rtype : int
@@ -107,6 +107,51 @@ class Graph:
         for node_id in self.dictionary:
             if node_id not in attainable_nodes:
                 yield (node_id, -1)
+
+        return
+
+    def reach_node_1_dual(self, start, end):
+        """
+        Return the length of the min path from start to end nodes, if there is no path return -1. Use BFS algorithm from
+        both nodes
+        :param start: int
+        :param end: int
+        :return: int
+        """
+        if start not in self.dictionary:
+            print 'Node ' + start + ' is not in the graph'
+            return -1
+        elif end not in self.dictionary:
+            print 'Node ' + end + ' is not in the graph'
+            return -1
+
+        bfs_generator_start = self.graph_bfs(start)
+        bfs_generator_end = self.graph_bfs(end)
+        path_found = False
+
+        visited_nodes_from_start = dict()
+        visited_nodes_from_start[start] = 0
+        visited_nodes_from_end = dict()
+        visited_nodes_from_end[end] = 0
+
+        while not path_found:
+            result = next(bfs_generator_start)
+            if result is not None:
+                visited_nodes_from_start[result[0]] = result[1]
+                if result[0] in visited_nodes_from_end:
+                    path_length = visited_nodes_from_start[result[0]] + visited_nodes_from_end[result[0]]
+                    return path_length
+            else:
+                return -1
+
+            result = next(bfs_generator_end)
+            if result is not None:
+                visited_nodes_from_end[result[0]] = result[1]
+                if result[0] in visited_nodes_from_start:
+                    path_length = visited_nodes_from_end[result[0]] + visited_nodes_from_start[result[0]]
+                    return path_length
+            else:
+                return -1
 
         return
 
