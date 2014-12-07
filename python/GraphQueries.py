@@ -1,5 +1,6 @@
 import datetime
 from FileOperations import *
+from GraphStatistics import *
 
 
 def match_suggestion(person_knows, person_lives, person_studies, person_works, node_id, interests, hops, age_diff, limit):
@@ -130,3 +131,57 @@ def filter_interests(node_id, person_knows, recommendations, num_of_interests):
             final.append((common, pers))
 
     return final
+
+
+def get_top_stalkers(person_knows, limit, likes_threshold, centrality_mode, stalkers_list):
+    # get persons with more than <likes_threshold> likes on another persons post
+    stalkers = get_stalkers(likes_threshold, person_knows)
+    scored_stalkers = rank_stalkers(stalkers, person_knows, centrality_mode)
+    for i in range(limit):
+        stalkers_list.append((scored_stalkers[i][1], scored_stalkers[i][0]))
+
+
+def get_stalkers(likes_threshold, person_knows):
+    """
+    Create and return a list of people with more than <likes_threshold> likes on someone else they are not friends with
+    :param likes_threshold:
+    :param person_knows: person knows person graph
+    :return: list of requested persons
+    """
+    person_likes_post_graph = create_graph_from_file("person_likes_post.csv")
+    post_has_owner_dict = create_dictionary_from_file("post_hasCreator_person.csv")
+    results = []
+
+    for person in person_knows.dictionary:
+        bfs_generator = person_likes_post_graph.graph_bfs(person)   # for each person in the graph
+        persons_liked = dict()                                      # key: post_owner, value: likes to his posts
+
+        for post_liked in bfs_generator:                            # for each post liked by this person
+            post_owner = post_has_owner_dict[post_liked[0]]         # find the owner of the post
+
+            if post_owner in persons_liked:
+                likes = persons_liked[post_owner]
+                likes += 1
+                persons_liked[post_owner] = likes
+                if likes >= likes_threshold:                        # stop searching for a person if threshold met
+                    if person_knows.reach_node_1(person, post_owner) != 1:  # they are not friends
+                        results.append(person)                              # add him to the stalkers
+                    break
+            else:
+                persons_liked[post_owner] = 1
+
+    return results
+
+
+def rank_stalkers(stalkers, person_knows, centrality_mode):
+    scored_stalkers = []
+    if centrality_mode == 1:
+        for stalker in stalkers:
+            score = closeness_centrality(person_knows, stalker)
+            scored_stalkers.append((score, stalker))
+    elif centrality_mode == 2:
+        # compute score of stalkers with betweenness centrality
+        scored_stalkers.append((1, 1))
+
+    scored_stalkers.sort()
+    return scored_stalkers

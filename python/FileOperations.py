@@ -11,11 +11,12 @@ def create_graph_from_file(filename):
     :param filename: CSV filename
     :return: Graph
     """
+    graph = Graph()
     with open(filename, 'r') as input_file:
         first_line = input_file.readline()
         parameters = first_line.split('|')
         print 'creating graph: ' + parameters[0] + ' -> ' + parameters[1]
-        graph = Graph()
+
         for line in input_file:
             if line[0] not in graph.dictionary:
                 node = Node(line[0])
@@ -37,11 +38,12 @@ def create_reverse_graph_from_file(filename):
     :param filename: CSV filename
     :return: Graph
     """
+    graph = Graph()
     with open(filename, 'r') as input_file:
         first_line = input_file.readline()
         parameters = first_line.split('|')
         print 'creating graph: ' + parameters[1] + ' -> ' + parameters[0]
-        graph = Graph()
+
         for line in input_file:
             if line[0] not in graph.dictionary:
                 node = Node(line[0])
@@ -76,3 +78,21 @@ def populate_person_graph(graph, person_data_file):
                 index += 1
 
     return
+
+
+def create_dictionary_from_file(filename):
+    """
+    Create a dictionary from a CSV file, first column must be the key, second column the value
+    :param filename: the name of a CSV file to be read
+    :return: dict
+    """
+    dictionary = dict()
+    with open(filename) as input_file:
+        first_line = input_file.readline()
+        parameters = first_line.split('|')
+        print 'creating dictionary[' + parameters[0] + '] = ' + parameters[1]
+
+        for line in input_file:
+            dictionary[line[0]] = line[1]
+
+    return dictionary
