@@ -24,7 +24,7 @@ def degree_distribution(graph):
 def diameter(graph):
     max_path = 0
     for node_id in graph.dictionary:
-        distances = graph.reach_node_n(node_id)
+        distances = graph.graph_bfs(node_id)
         for path in distances:
             if path[1] > max_path:
                 max_path = path[1]
@@ -82,7 +82,7 @@ def max_connected_component(graph):
 
 
 def density(graph):
-    den = (2*graph.number_of_edges)/(graph.number_of_nodes*(graph.number_of_nodes - 1))
+    den = float((2*graph.number_of_edges))/float((graph.number_of_nodes*(graph.number_of_nodes - 1)))
     return den
 
 
@@ -91,8 +91,8 @@ def closeness_centrality(graph, node_id):
     cc = 0
     for path in bfs_generator:
         if path[1] > 0:
-            cc += 1/path[1]
+            cc += 1/float(path[1])
 
-    normalized_cc = cc/(graph.number_of_nodes - 1)
+    normalized_cc = float(cc)/float((graph.number_of_nodes - 1))
     return normalized_cc
 

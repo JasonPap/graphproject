@@ -27,6 +27,7 @@ class Graph:
         if node_id in self.dictionary:
             node = self.dictionary[node_id]
             node.links.append(edge)
+            self.dictionary[node_id] = node
             self.number_of_edges += 1
             return True
         else:
@@ -55,7 +56,7 @@ class Graph:
         visited_nodes = [start_node_id]
         nodes_to_expand = deque([(start_node_id, 0)])
 
-        while not nodes_to_expand:
+        while nodes_to_expand:
             current_node = self.dictionary[nodes_to_expand[0][0]]
             current_node_distance = nodes_to_expand[0][1]
             current_node_links = current_node.links
