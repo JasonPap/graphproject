@@ -1,5 +1,7 @@
 __author__ = 'Jason'
 
+from collections import deque
+
 
 def degree_distribution(graph):
     distribution = dict()
@@ -95,4 +97,55 @@ def closeness_centrality(graph, node_id):
 
     normalized_cc = float(cc)/float((graph.number_of_nodes - 1))
     return normalized_cc
+
+
+def betweenness_centrality(graph):
+    CB = dict()
+    for s in graph.dictionary:
+        S = []  # stack
+        P = dict()
+        sigma = dict()
+        d = dict()
+        delta = dict()
+        for i in graph.dictionary:
+            sigma[i] = 0
+            d[i] = -1
+            P[i] = []
+            delta[i] = 0
+        sigma[s] = 1
+        d[s] = 0
+        Q = deque()
+        Q.append(s)
+        while Q:
+            v = Q.popleft()
+            S.append(v)
+            node_v = graph.lookup_node(v)
+            for W in node_v.links:
+                w = W.edge_end
+                if d[w] < 0:
+                    Q.append(w)
+                    d[w] = d[v] + 1
+
+                if d[w] == (d[v] + 1):
+                    sigma[w] += sigma[v]
+                    P[w].append(v)
+
+        # delta[v] = 0 v in V
+        while S:
+            w = S.pop()
+            for v in P[w]:
+                delta[v] += (float(sigma[v])/float(sigma[w]))*(1 + delta[w])
+            if w != s:
+                if w in CB:
+                    CB[w] += delta[w]
+                else:
+                    CB[w] = delta[w]
+
+    size = len(graph.dictionary)
+    param = float((size - 1)*(size - 2))/2
+    for i in CB:
+        CB[i] = float(CB[i])/param
+    return CB
+
+
 

@@ -13,7 +13,11 @@ def main():
     # print diameter(pkp_graph)
     # print average_path_length(pkp_graph)
     # print max_connected_component(pkp_graph)
-    print closeness_centrality(pkp_graph, 38)
+    # print closeness_centrality(pkp_graph, 38)
+    CB = betweenness_centrality(pkp_graph)
+    for x in CB:
+        print "node " + str(x)
+        print CB[x]
 
 
 def fun():
