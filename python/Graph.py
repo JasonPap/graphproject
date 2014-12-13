@@ -1,6 +1,8 @@
 __author__ = 'Jason'
 
 from collections import deque
+from Node import Node
+from Edge import Edge
 
 
 class Graph:
@@ -156,12 +158,17 @@ class Graph:
 
         return
 
+    def fill_from_list(self, persons_list, person_knows):
 
+        for person_id in persons_list:
+            node = person_knows.lookup_node(person_id)
+            new_node = Node(person_id, [], [])
+            new_node.attributes.extend(node.attributes)
+            new_node.interests.extend(node.interests)
+            self.insert_node(new_node)
+            for edge in node.links:
+                if edge.edge_end in persons_list:
+                    new_edge = Edge(edge.edge_end, [])
+                    self.insert_edge(person_id, new_edge)
 
-
-
-
-
-
-
-
+        return

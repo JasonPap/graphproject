@@ -1,4 +1,5 @@
 import datetime
+from collections import deque
 from FileOperations import *
 from GraphStatistics import *
 
@@ -136,9 +137,13 @@ def filter_interests(node_id, person_knows, recommendations, num_of_interests):
 def get_top_stalkers(person_knows, limit, likes_threshold, centrality_mode, stalkers_list):
     # get persons with more than <likes_threshold> likes on another persons post
     stalkers = get_stalkers(likes_threshold, person_knows)
-    scored_stalkers = rank_stalkers(stalkers, person_knows, centrality_mode)
+    stalkers_graph = Graph()
+    stalkers_graph.fill_from_list(stalkers, person_knows)
+    scored_stalkers = rank_stalkers(stalkers_graph, centrality_mode)
     for i in range(limit):
         stalkers_list.append((scored_stalkers[i][1], scored_stalkers[i][0]))
+
+    return stalkers_graph
 
 
 def get_stalkers(likes_threshold, person_knows):
@@ -173,15 +178,111 @@ def get_stalkers(likes_threshold, person_knows):
     return results
 
 
-def rank_stalkers(stalkers, person_knows, centrality_mode):
+def rank_stalkers(stalkers_graph, centrality_mode):
     scored_stalkers = []
-    if centrality_mode == 1:
-        for stalker in stalkers:
-            score = closeness_centrality(person_knows, stalker)
+    if centrality_mode == 1:            # for closeness centrality
+        for stalker in stalkers_graph:
+            score = closeness_centrality(stalkers_graph, stalker)
             scored_stalkers.append((score, stalker))
-    elif centrality_mode == 2:
+    elif centrality_mode == 2:          # for betweenness centrality
         # compute score of stalkers with betweenness centrality
         scored_stalkers.append((1, 1))
 
     scored_stalkers.sort()
     return scored_stalkers
+
+
+def find_trends(k, person_knows, women_trends, men_trends):
+    womens_graph = Graph()
+    mens_graph = Graph()
+    women_list = []
+    men_list = []
+    for person_id in person_knows.dictionary:
+        if person_knows.lookup_node(person_id).attributes["gender"] == "male":
+            men_list.append(person_id)
+        else:
+            women_list.append(person_id)
+
+    womens_graph.fill_from_list(women_list, person_knows)
+    mens_graph.fill_from_list(men_list, person_knows)
+
+    men_dict = dict()      # key: interest , val: trend size
+    women_dict = dict()    # key: interest , val: trend size
+
+    visited = dict()        # key: interest , val: list of visited ids who like this interest
+
+    for man_id in mens_graph.dictionary:
+        man_node = mens_graph.lookup_node(man_id)
+        for interest in man_node.interests:
+            if interest not in visited:
+                visited[interest] = [man_id]
+            elif man_id not in visited[interest]:
+                visited[interest].append(man_id)
+            else:
+                break
+
+            trend_group = search_trend(mens_graph, man_id, interest, visited[interest])
+            trend_group_size = len(trend_group)
+            if interest not in men_dict:
+                men_dict[interest] = trend_group_size
+            elif trend_group_size > men_dict[interest]:
+                men_dict[interest] = trend_group_size
+
+            for person_id in trend_group:
+                if person_id not in visited[interest]:
+                    visited[interest].append(person_id)
+
+    men_trends = top_trends(men_dict, k)
+    visited.clear()
+
+    for woman_id in womens_graph.dictionary:
+        women_node = womens_graph.lookup_node(woman_id)
+        for interest in women_node.interests:
+            if interest not in visited:
+                visited[interest] = [woman_id]
+            elif woman_id not in visited[woman_id]:
+                visited[woman_id].append(woman_id)
+            else:
+                break
+
+            trend_group = search_trend(womens_graph, woman_id, interest, visited[interest])
+            trend_group_size = len(trend_group)
+            if interest not in women_dict:
+                women_dict[interest] = trend_group_size
+            elif trend_group_size > women_dict[interest]:
+                women_dict[interest] = trend_group_size
+
+            for person_id in trend_group:
+                if person_id not in visited[interest]:
+                    visited[interest].append(person_id)
+
+    women_trends = top_trends(women_dict, k)
+
+
+def top_trends(dictionary, k):
+    trends = []
+    for trend in dictionary:
+        trends.append((dictionary[trend], trend))
+    trends.sort()
+    return trends[:k]
+
+
+def search_trend(graph, start_node_id, trend, already_visited):
+    visited_nodes = []
+    visited_nodes.extend(already_visited)
+    if start_node_id not in visited_nodes:
+        visited_nodes.append(start_node_id)
+    nodes_to_expand = deque([start_node_id])
+
+    while nodes_to_expand:
+        current_node = graph.lookup_node(nodes_to_expand[0])
+        current_node_links = current_node.links
+        for edge in current_node_links:
+            if edge.edge_end not in visited_nodes:
+                p_node = graph.lookup_node(edge.edge_end)
+                if trend in p_node.interests:
+                    visited_nodes.append(edge.edge_end)
+                    nodes_to_expand.append(edge.edge_end)
+        nodes_to_expand.popleft()
+
+    return visited_nodes
