@@ -287,13 +287,8 @@ def search_trend(graph, start_node_id, trend, already_visited):
 
     return visited_nodes
 
+
 def build_trust_graph(forum_name, person_knows):
-
-
-    return
-
-
-def load_files(forum_name, person_knows):
 
     forum_id = -1
 
@@ -347,3 +342,103 @@ def load_files(forum_name, person_knows):
         for line in input_file:
             line = line.rstrip('\n')
             line = line.split('|')
+
+    comments_in_forum = []
+    comment_of_post = dict()                            # key: comment_id  val: post_id
+    with open("comment_replyOf_post.csv", 'r') as input_file:
+        first_line = input_file.readline()
+        first_line = first_line.rstrip('\n')
+
+        for line in input_file:
+            if int(line[1]) in posts_in_forum:
+                comments_in_forum.append(int(line[0]))
+                comment_of_post[int(line[0])] = int(line[1])
+
+    comments_of_comments = []
+    with open("comment_replyOf_comment.csv", 'r') as input_file:
+        first_line = input_file.readline()
+        first_line = first_line.rstrip('\n')
+
+        for line in input_file:
+            if int(line[1]) in comments_in_forum:
+                comments_of_comments.append(int(line[0]))
+                comment_of_post[int(line[0])] = comment_of_post[int(line[1])]
+
+    comments_in_forum.extend(comments_of_comments)
+    comments_of_comments = []
+
+    with open("comment_hasCreator_person.csv", 'r') as input_file:
+        first_line = input_file.readline()
+        first_line = first_line.rstrip('\n')
+
+        for line in input_file:
+            if int(line[0]) in comments_in_forum:
+                if int(line[1]) in person_has_comments:
+                    person_has_comments[int(line[1])].append(int(line[0]))
+                else:
+                    person_has_comments[int(line[1])] = [int(line[0])]
+
+    posts_are_liked_by = dict()             # key: post_id          val: list of persons that like the post
+    person_likes_posts = dict()             # key: person_id        val: list of posts that person likes
+    with open("person_likes_post", 'r') as input_file:
+        first_line = input_file.readline()
+        first_line = first_line.rstrip('\n')
+
+        for line in input_file:
+            if int(line[1]) in posts_in_forum:
+                if int(line[1]) in posts_are_liked_by:
+                    posts_are_liked_by[int(line[1])].append(int(line[0]))
+                else:
+                    posts_are_liked_by[int(line[1])] = [int(line[0])]
+
+                if int(line[0]) in person_likes_posts:
+                    person_likes_posts[int(line[0])].append(int(line[1]))
+                else:
+                    person_likes_posts[int(line[0])] = [int(line[1])]
+
+    # person_has_comments = dict()          # key = person_id       val = list of comment ids
+    # person_has_posts = dict()             # key = person_id       val = list of post ids
+    # posts_are_liked_by = dict()           # key: post_id          val: list of persons that like the post
+    # person_likes_posts = dict()           # key: person_id        val: list of posts that person likes
+    # comment_of_post = dict()              # key: comment_id       val: post_id
+
+    trust_graph = Graph()
+    for person_id in person_knows.dictionary:
+        person_node = Node(person_id, [], [])
+        trust_graph.insert_node(person_node)
+
+        original_node = person_knows.lookup_node(person_id)
+        num_of_total_likes = 0
+        if person_id in person_likes_posts:
+            num_of_total_likes = len(person_likes_posts[person_id])
+
+        num_of_total_comments = 0
+        if person_id in person_has_comments:
+            num_of_total_comments = len(person_has_comments[person_id])
+
+        for neighbour_edge in original_node.links:
+            neighbour = neighbour_edge.edge_end
+            trust_weight = 0
+            likes_to_this_neighbour = 0
+            for like in person_likes_posts[person_id]:
+                if like in person_has_posts[neighbour]:
+                    likes_to_this_neighbour += 1
+
+            if likes_to_this_neighbour > 0:
+                trust_weight += 0.3 * (float(likes_to_this_neighbour)/float(num_of_total_likes))
+
+            comments_to_this_neighbour = 0
+            for comment in person_has_comments[person_id]:
+                post_replied = comment_of_post[comment]
+                if post_replied in person_has_posts[neighbour]:
+                    comments_to_this_neighbour += 1
+
+            if comments_to_this_neighbour > 0:
+                trust_weight += 0.7 * (float(comments_to_this_neighbour)/float(num_of_total_comments))
+
+            edge = Edge(neighbour, [("weight", trust_weight)])
+            trust_graph.insert_edge(person_id, edge)
+
+    return trust_graph
+
+

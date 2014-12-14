@@ -172,3 +172,29 @@ class Graph:
                     self.insert_edge(person_id, new_edge)
 
         return
+
+    def get_node_ids(self):
+        node_ids = []
+        for i in self.dictionary:
+            node_ids.append(i)
+        return node_ids
+
+    def floyd_warshall(self):
+        node_ids = self.get_node_ids()
+        dist = []
+        for i in self.dictionary:
+            dist.append([])
+            for j in self.dictionary:
+                dist[i].append(-1)
+
+        next_a = []
+        for i in self.dictionary:
+            next_a.append([])
+            for j in self.dictionary:
+                next_a[i].append(None)
+
+        for node_id in self.dictionary:
+            node = self.dictionary[node_id]
+            for edge in node.links:
+                dist[node_id][]
+
