@@ -286,3 +286,64 @@ def search_trend(graph, start_node_id, trend, already_visited):
         nodes_to_expand.popleft()
 
     return visited_nodes
+
+def build_trust_graph(forum_name, person_knows):
+
+
+    return
+
+
+def load_files(forum_name, person_knows):
+
+    forum_id = -1
+
+    with open("forum.csv", 'r') as input_file:
+        first_line = input_file.readline()
+        first_line = first_line.rstrip('\n')
+        parameters = first_line.split('|')
+
+        for line in input_file:
+            line = line.rstrip('\n')
+            line = line.split('|')
+            if line[1] == forum_name:
+                forum_id = int(line[0])
+                break
+
+    posts_in_forum = []
+
+    with open("forum_containerOf_post.csv", 'r') as input_file:
+        first_line = input_file.readline()
+        first_line = first_line.rstrip('\n')
+        parameters = first_line.split('|')
+
+        for line in input_file:
+            line = line.rstrip('\n')
+            line = line.split('|')
+            if int(line[0]) == forum_id:
+                posts_in_forum.append(int(line[1]))
+
+    person_has_comments = dict()        # key = person_id        val = list of comment ids
+    person_has_posts = dict()           # key = person_id        val = list of post ids
+
+    with open("post_hasCreator_person.csv",'r') as input_file:
+        first_line = input_file.readline()
+        first_line = first_line.rstrip('\n')
+        parameters = first_line.split('|')
+
+        for line in input_file:
+            line = line.rstrip('\n')
+            line = line.split('|')
+            if int(line[0]) in posts_in_forum:
+                if int(line[1]) in person_has_posts:
+                    person_has_posts[int(line[1])].append(int(line[0]))
+                else:
+                    person_has_posts[int(line[1])] = [int(line[0])]
+
+    with open("comment_hasCreator_person.csv", 'r') as input_file:
+        first_line = input_file.readline()
+        first_line = first_line.rstrip('\n')
+        parameters = first_line.split('|')
+
+        for line in input_file:
+            line = line.rstrip('\n')
+            line = line.split('|')
