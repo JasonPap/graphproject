@@ -59,13 +59,13 @@ def create_reverse_graph_from_file(filename):
                 node = Node(int(line[1]), [], [])
                 graph.insert_node(node)
 
-            edge = Edge(int(line[0]))
+            edge = Edge(int(line[0]), [])
             graph.insert_edge(int(line[1]), edge)
 
     return graph
 
 
-def populate_person_graph(graph, person_data_file):
+def populate_person_graph(graph, person_data_file, person_interests_file):
     """
     This functions takes a person knows person graph and populate the nodes with information from the file given
     :param person_data_file: a CSV file with information about the persons
@@ -85,6 +85,18 @@ def populate_person_graph(graph, person_data_file):
                 for attribute in person_data[1:]:
                     node.attributes[parameters[index]] = attribute
                     index += 1
+
+    with open(person_interests_file) as input_file:
+        first_line = input_file.readline()
+        first_line = first_line.rstrip('\n')
+        parameters = first_line.split('|')
+
+        for line in input_file:
+            line = line.rstrip('\n')
+            line = line.split('|')
+            node = graph.lookup_node(int(line[0]))
+            if node is not None:
+                node.interests.append(int(line[1]))
 
     return
 

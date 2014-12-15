@@ -4,7 +4,11 @@ from FileOperations import *
 from GraphStatistics import *
 
 
-def match_suggestion(person_knows, person_lives, person_studies, person_works, node_id, interests, hops, age_diff, limit):
+def match_suggestion(person_knows, node_id, interests, hops, age_diff, limit):
+
+    person_lives = create_graph_from_file("person_isLocatedIn_place.csv")
+    person_studies = create_graph_from_file("person_studyAt_organisation.csv")
+    person_works = create_graph_from_file("person_workAt_organisation.csv")
 
     if node_id not in person_knows.dictionary:
         print 'Node ' + node_id + ' is not in the graph'
@@ -32,9 +36,13 @@ def score_candidates(node_id, person_knows, recommendation, limit):
     for candidate in recommendation[:limit]:
         temp_interest_num = len(person_knows.lookup_node(candidate[1]).interests)
         score = float(candidate[0])/float(temp_interest_num + interest_number - candidate[0])
-        final.append((candidate[1], score))
+        final.append((score, candidate[1]))
+    final.sort()
+    super_final = []
+    for entry in final:
+        super_final.append((entry[1], entry[0]))
 
-    return final
+    return super_final
 
 
 def filter_gender(node_id, person_knows, recommendations):
@@ -51,11 +59,11 @@ def filter_gender(node_id, person_knows, recommendations):
 
 def filter_age(node_id, person_knows, recommendations, age_diff):
 
-    age1 = (person_knows.lookup_node(node_id)).attributes["age"]
+    age1 = (person_knows.lookup_node(node_id)).attributes["birthday"]
     birthdate1 = datetime.datetime.strptime(age1, '%Y-%m-%d')
 
     for temp_node in recommendations:
-        age2 = (person_knows.lookup_node(temp_node)).attributes["age"]
+        age2 = (person_knows.lookup_node(temp_node)).attributes["birthday"]
         birthdate2 = datetime.datetime.strptime(age2, '%Y-%m-%d')
         age_difference = abs((birthdate1 - birthdate2).days)/365
         if age_difference > age_diff:
@@ -70,36 +78,36 @@ def filter_places(node_id, person_lives, person_studies, person_works, recommend
     person_works_r = create_reverse_graph_from_file("person_workAt_organisation.csv")
     person_lives_r = create_reverse_graph_from_file("person_isLocatedIn_place.csv")
 
-    bfs_gen = person_lives.bfs_graph(node_id)          #oi perioxes poy menei o node
+    bfs_gen = person_lives.graph_bfs(node_id)          #oi perioxes poy menei o node
     city_living = []
     for city in bfs_gen:
         city_living.append(city[0])
 
-    bfs_gen = person_studies.bfs_graph(node_id)        #ta universities toy node
+    bfs_gen = person_studies.graph_bfs(node_id)        #ta universities toy node
     uni_studying = []
     for uni in bfs_gen:
         uni_studying.append(uni[0])
 
-    bfs_gen = person_works.bfs_graph(node_id)         #ta workplaces toy node
+    bfs_gen = person_works.graph_bfs(node_id)         #ta workplaces toy node
     work_places = []
     for job in bfs_gen:
         work_places.append(job[0])
 
     all_in_nodes_uni = []                          #oloi poy spoydazoyn se kapoio ap ta universities toy node
     for uni in uni_studying:
-        bfs_gen = person_studies_r.bfs_graph(uni)
+        bfs_gen = person_studies_r.graph_bfs(uni)
         for student in bfs_gen:
             all_in_nodes_uni.append(student[0])
 
     all_in_jobs = []
     for job in work_places:
-        bfs_gen = person_works_r.bfs_graph(job)
+        bfs_gen = person_works_r.graph_bfs(job)
         for employee in bfs_gen:
             all_in_jobs.append(employee[0])
 
     all_in_cities = []
     for city in city_living:
-        bfs_gen = person_lives_r.bfs_graph(city)
+        bfs_gen = person_lives_r.graph_bfs(city)
         for citizen in bfs_gen:
             all_in_cities.append(citizen[0])
 
@@ -121,14 +129,14 @@ def filter_interests(node_id, person_knows, recommendations, num_of_interests):
     """
     final = []
     b_node = person_knows.lookup_node(node_id)
-    interests = b_node.intersts
+    interests = b_node.interests
     for pers in recommendations:
         temp_node = person_knows.lookup_node(pers)
         common = 0
         for interest in temp_node.interests:
             if interest in interests:
                 common += 1
-        if common > num_of_interests:
+        if common >= num_of_interests:
             final.append((common, pers))
 
     return final
