@@ -246,7 +246,7 @@ def find_trends(k, person_knows, women_trends, men_trends):
                 if person_id not in visited[interest]:
                     visited[interest].append(person_id)
 
-    men_trends = top_trends(men_dict, k)
+    men_trends.extend(top_trends(men_dict, k))
     visited.clear()
 
     for woman_id in womens_graph.dictionary:
@@ -254,8 +254,8 @@ def find_trends(k, person_knows, women_trends, men_trends):
         for interest in women_node.interests:
             if interest not in visited:
                 visited[interest] = [woman_id]
-            elif woman_id not in visited[woman_id]:
-                visited[woman_id].append(woman_id)
+            elif woman_id not in visited[interest]:
+                visited[interest].append(woman_id)
             else:
                 break
 
@@ -270,7 +270,8 @@ def find_trends(k, person_knows, women_trends, men_trends):
                 if person_id not in visited[interest]:
                     visited[interest].append(person_id)
 
-    women_trends = top_trends(women_dict, k)
+    women_trends.extend(top_trends(women_dict, k))
+    return
 
 
 def top_trends(dictionary, k):
@@ -278,6 +279,7 @@ def top_trends(dictionary, k):
     for trend in dictionary:
         trends.append((dictionary[trend], trend))
     trends.sort()
+    trends.reverse()
     return trends[:k]
 
 

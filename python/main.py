@@ -10,9 +10,11 @@ def main():
     pkp_graph = create_graph_from_file("person_knows_person.csv")
     populate_person_graph(pkp_graph, "person.csv", "person_hasInterest_tag.csv")
 
-    stalkers = []
-    stalker_graph = get_top_stalkers(pkp_graph, 100, 2, 1, stalkers)
-    print stalkers
+    adres = []
+    ginekes = []
+    find_trends(3, pkp_graph, ginekes, adres)
+    print adres
+    print ginekes
 
     # print number_of_connected_components(pkp_graph)
     # print diameter(pkp_graph)
