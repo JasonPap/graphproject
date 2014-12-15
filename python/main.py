@@ -10,11 +10,31 @@ def main():
     pkp_graph = create_graph_from_file("person_knows_person.csv")
     populate_person_graph(pkp_graph, "person.csv", "person_hasInterest_tag.csv")
 
-    adres = []
-    ginekes = []
-    find_trends(3, pkp_graph, ginekes, adres)
-    print adres
-    print ginekes
+
+    g = build_trust_graph("Album 7 of Meera Kapoor", pkp_graph)
+
+    """
+    for i in g.dictionary:
+        print "---"
+        print "from " + str(i)
+        for e in g.lookup_node(i).links:
+            print "to " + str(e.edge_end)
+            print e.properties["weight"]
+            print "--"
+    """
+    print estimate_trust(30, 9805, g)
+
+    """
+    for i in g.dictionary:
+        for j in g.dictionary:
+            x = estimate_trust(i, j, g)
+            if x > 0:
+                print "----"
+                print i
+                print j
+                print x
+        print i
+    """
 
     # print number_of_connected_components(pkp_graph)
     # print diameter(pkp_graph)

@@ -350,6 +350,7 @@ def build_trust_graph(forum_name, person_knows):
                 else:
                     person_has_posts[int(line[1])] = [int(line[0])]
 
+    """
     with open("comment_hasCreator_person.csv", 'r') as input_file:
         first_line = input_file.readline()
         first_line = first_line.rstrip('\n')
@@ -358,6 +359,7 @@ def build_trust_graph(forum_name, person_knows):
         for line in input_file:
             line = line.rstrip('\n')
             line = line.split('|')
+    """
 
     comments_in_forum = []
     comment_of_post = dict()                            # key: comment_id  val: post_id
@@ -366,9 +368,12 @@ def build_trust_graph(forum_name, person_knows):
         first_line = first_line.rstrip('\n')
 
         for line in input_file:
+            line = line.rstrip('\n')
+            line = line.split('|')
             if int(line[1]) in posts_in_forum:
                 comments_in_forum.append(int(line[0]))
                 comment_of_post[int(line[0])] = int(line[1])
+    print len(posts_in_forum)
 
     comments_of_comments = []
     with open("comment_replyOf_comment.csv", 'r') as input_file:
@@ -376,6 +381,8 @@ def build_trust_graph(forum_name, person_knows):
         first_line = first_line.rstrip('\n')
 
         for line in input_file:
+            line = line.rstrip('\n')
+            line = line.split('|')
             if int(line[1]) in comments_in_forum:
                 comments_of_comments.append(int(line[0]))
                 comment_of_post[int(line[0])] = comment_of_post[int(line[1])]
@@ -388,6 +395,8 @@ def build_trust_graph(forum_name, person_knows):
         first_line = first_line.rstrip('\n')
 
         for line in input_file:
+            line = line.rstrip('\n')
+            line = line.split('|')
             if int(line[0]) in comments_in_forum:
                 if int(line[1]) in person_has_comments:
                     person_has_comments[int(line[1])].append(int(line[0]))
@@ -396,11 +405,13 @@ def build_trust_graph(forum_name, person_knows):
 
     posts_are_liked_by = dict()             # key: post_id          val: list of persons that like the post
     person_likes_posts = dict()             # key: person_id        val: list of posts that person likes
-    with open("person_likes_post", 'r') as input_file:
+    with open("person_likes_post.csv", 'r') as input_file:
         first_line = input_file.readline()
         first_line = first_line.rstrip('\n')
 
         for line in input_file:
+            line = line.rstrip('\n')
+            line = line.split('|')
             if int(line[1]) in posts_in_forum:
                 if int(line[1]) in posts_are_liked_by:
                     posts_are_liked_by[int(line[1])].append(int(line[0]))
@@ -436,33 +447,38 @@ def build_trust_graph(forum_name, person_knows):
             neighbour = neighbour_edge.edge_end
             trust_weight = 0
             likes_to_this_neighbour = 0
-            for like in person_likes_posts[person_id]:
-                if like in person_has_posts[neighbour]:
-                    likes_to_this_neighbour += 1
+            if person_id in person_likes_posts:
+                for like in person_likes_posts[person_id]:
+                    if neighbour in person_has_posts:
+                        if like in person_has_posts[neighbour]:
+                            likes_to_this_neighbour += 1
 
             if likes_to_this_neighbour > 0:
                 trust_weight += 0.3 * (float(likes_to_this_neighbour)/float(num_of_total_likes))
 
             comments_to_this_neighbour = 0
-            for comment in person_has_comments[person_id]:
-                post_replied = comment_of_post[comment]
-                if post_replied in person_has_posts[neighbour]:
-                    comments_to_this_neighbour += 1
+            if person_id in person_has_comments:
+                for comment in person_has_comments[person_id]:
+                    post_replied = comment_of_post[comment]
+                    if neighbour in person_has_posts:
+                        if post_replied in person_has_posts[neighbour]:
+                            comments_to_this_neighbour += 1
 
             if comments_to_this_neighbour > 0:
                 trust_weight += 0.7 * (float(comments_to_this_neighbour)/float(num_of_total_comments))
 
-            edge = Edge(neighbour, [("weight", trust_weight)])
-            trust_graph.insert_edge(person_id, edge)
+            if trust_weight > 0:
+                edge = Edge(neighbour, [("weight", trust_weight)])
+                trust_graph.insert_edge(person_id, edge)
 
     return trust_graph
 
 
 def estimate_trust(from_node, to_node, trust_graph):
     shortest_paths = trust_graph.dijkstra_shortest_paths_from(from_node, to_node)
-    max_trust = 0
+    max_trust = 0.0
     for path in shortest_paths:
-        trust_multiplier = 1
+        trust_multiplier = 1.0
         prev_node = trust_graph.lookup_node(from_node)
         for node_id in path:
             for edge in prev_node.links:
