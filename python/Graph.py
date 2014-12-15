@@ -179,22 +179,36 @@ class Graph:
             node_ids.append(i)
         return node_ids
 
-    def floyd_warshall(self):
-        node_ids = self.get_node_ids()
-        dist = []
-        for i in self.dictionary:
-            dist.append([])
-            for j in self.dictionary:
-                dist[i].append(-1)
-
-        next_a = []
-        for i in self.dictionary:
-            next_a.append([])
-            for j in self.dictionary:
-                next_a[i].append(None)
-
+    def dijkstra_shortest_paths_from(self, start_node_id, end_node_id):
+        """
+        Generator of all shortest pats from start to end nodes
+        :param start_node_id:
+        :param end_node_id:
+        :return:
+        """
+        dist = dict()
+        path = dict()
+        path[start_node_id] = []
+        nodes_to_expand = deque()
+        nodes_to_expand.append(start_node_id)
         for node_id in self.dictionary:
-            node = self.dictionary[node_id]
-            for edge in node.links:
-                dist[node_id][]
+            dist[node_id] = float("inf")
+            path[node_id] = []
 
+        dist[start_node_id] = 0
+
+        while nodes_to_expand:
+            node_id = nodes_to_expand.popleft()
+            if node_id == end_node_id:
+                return
+            for edge in self.lookup_node(node_id).links:
+                neighbour = edge.edge_end
+                nodes_to_expand.append(neighbour)
+                alt = dist[node_id] + 1
+                if alt < dist[neighbour]:
+                    dist[neighbour] = alt
+                    path[neighbour] = path[node_id] + [neighbour]
+                    if neighbour == end_node_id:
+                        yield path[neighbour]
+
+        return

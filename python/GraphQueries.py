@@ -442,3 +442,21 @@ def build_trust_graph(forum_name, person_knows):
     return trust_graph
 
 
+def estimate_trust(from_node, to_node, trust_graph):
+    shortest_paths = trust_graph.dijkstra_shortest_paths_from(from_node, to_node)
+    max_trust = 0
+    for path in shortest_paths:
+        trust_multiplier = 1
+        prev_node = trust_graph.lookup_node(from_node)
+        for node_id in path:
+            for edge in prev_node.links:
+                if edge.edge_end == node_id:
+                    weight = edge.properties["weight"]
+                    trust_multiplier = trust_multiplier * weight
+
+            prev_node = trust_graph.lookup_node(node_id)
+
+        if trust_multiplier > max_trust:
+            max_trust = trust_multiplier
+
+    return max_trust
