@@ -148,6 +148,8 @@ def get_top_stalkers(person_knows, limit, likes_threshold, centrality_mode, stal
     stalkers_graph = Graph()
     stalkers_graph.fill_from_list(stalkers, person_knows)
     scored_stalkers = rank_stalkers(stalkers_graph, centrality_mode)
+    if len(scored_stalkers) < limit:
+        limit = len(scored_stalkers)
     for i in range(limit):
         stalkers_list.append((scored_stalkers[i][1], scored_stalkers[i][0]))
 
@@ -179,9 +181,13 @@ def get_stalkers(likes_threshold, person_knows):
                 if likes >= likes_threshold:                        # stop searching for a person if threshold met
                     if person_knows.reach_node_1(person, post_owner) != 1:  # they are not friends
                         results.append(person)                              # add him to the stalkers
-                    break
+                        break
             else:
                 persons_liked[post_owner] = 1
+                if 1 >= likes_threshold:                        # stop searching for a person if threshold met
+                    if person_knows.reach_node_1(person, post_owner) != 1:  # they are not friends
+                        results.append(person)                              # add him to the stalkers
+                        break
 
     return results
 
@@ -189,7 +195,7 @@ def get_stalkers(likes_threshold, person_knows):
 def rank_stalkers(stalkers_graph, centrality_mode):
     scored_stalkers = []
     if centrality_mode == 1:            # for closeness centrality
-        for stalker in stalkers_graph:
+        for stalker in stalkers_graph.dictionary:
             score = closeness_centrality(stalkers_graph, stalker)
             scored_stalkers.append((score, stalker))
     elif centrality_mode == 2:          # for betweenness centrality

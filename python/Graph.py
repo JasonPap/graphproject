@@ -78,10 +78,10 @@ class Graph:
         :rtype : int
         """
         if start not in self.dictionary:
-            print 'Node ' + start + ' is not in the graph'
+            print 'Node ' + str(start) + ' is not in the graph'
             return -1
         elif end not in self.dictionary:
-            print 'Node ' + end + ' is not in the graph'
+            print 'Node ' + str(end) + ' is not in the graph'
             return -1
 
         bfs_generator = self.graph_bfs(start)
@@ -163,7 +163,8 @@ class Graph:
         for person_id in persons_list:
             node = person_knows.lookup_node(person_id)
             new_node = Node(person_id, [], [])
-            new_node.attributes.extend(node.attributes)
+            for attr in node.attributes:
+                new_node.attributes[attr] = node.attributes[attr]
             new_node.interests.extend(node.interests)
             self.insert_node(new_node)
             for edge in node.links:

@@ -10,11 +10,9 @@ def main():
     pkp_graph = create_graph_from_file("person_knows_person.csv")
     populate_person_graph(pkp_graph, "person.csv", "person_hasInterest_tag.csv")
 
-    # print pkp_graph.lookup_node(37).interests
-
-    tmp = match_suggestion(pkp_graph, 23, 1, 1000, 100, 50)
-    for aaa in tmp:
-        print aaa
+    stalkers = []
+    stalker_graph = get_top_stalkers(pkp_graph, 100, 2, 1, stalkers)
+    print stalkers
 
     # print number_of_connected_components(pkp_graph)
     # print diameter(pkp_graph)
