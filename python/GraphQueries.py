@@ -307,7 +307,7 @@ def search_trend(graph, start_node_id, trend, already_visited):
 def build_trust_graph(forum_name, person_knows):
 
     forum_id = -1
-    print "in build trust graph"
+    print "creating trust graph"
 
     with open("forum.csv", 'r') as input_file:
         first_line = input_file.readline()
@@ -324,7 +324,6 @@ def build_trust_graph(forum_name, person_knows):
     posts_in_forum = []
 
     with open("forum_containerOf_post.csv", 'r') as input_file:
-        print "opened forum_containerOf_post.csv"
         first_line = input_file.readline()
         first_line = first_line.rstrip('\n')
         parameters = first_line.split('|')
@@ -335,7 +334,6 @@ def build_trust_graph(forum_name, person_knows):
             if int(line[0]) == forum_id:
                 posts_in_forum.append(int(line[1]))
 
-    print "posts in forum = " + str(len(posts_in_forum))
     person_has_comments = dict()        # key = person_id        val = list of comment ids
     person_has_posts = dict()           # key = person_id        val = list of post ids
 
@@ -353,19 +351,6 @@ def build_trust_graph(forum_name, person_knows):
                 else:
                     person_has_posts[int(line[1])] = [int(line[0])]
 
-    print "person has posts size = " + str(len(person_has_posts))
-
-    """
-    with open("comment_hasCreator_person.csv", 'r') as input_file:
-        first_line = input_file.readline()
-        first_line = first_line.rstrip('\n')
-        parameters = first_line.split('|')
-
-        for line in input_file:
-            line = line.rstrip('\n')
-            line = line.split('|')
-    """
-
     comments_in_forum = []
     comment_of_post = dict()                            # key: comment_id  val: post_id
     with open("comment_replyOf_post.csv", 'r') as input_file:
@@ -378,7 +363,6 @@ def build_trust_graph(forum_name, person_knows):
             if int(line[1]) in posts_in_forum:
                 comments_in_forum.append(int(line[0]))
                 comment_of_post[int(line[0])] = int(line[1])
-    print len(posts_in_forum)
 
     """
     comments_of_comments = []
@@ -478,6 +462,7 @@ def build_trust_graph(forum_name, person_knows):
                 edge = Edge(neighbour, [("weight", trust_weight)])
                 trust_graph.insert_edge(person_id, edge)
 
+    print "trust graph created"
     return trust_graph
 
 

@@ -2,7 +2,7 @@ __author__ = 'Jason'
 
 from FileOperations import *
 from GraphStatistics import *
-from  GraphQueries import *
+from GraphQueries import *
 
 
 def main():
@@ -18,17 +18,11 @@ def main():
     # print closeness_centrality(pkp_graph, 10)
     # print closeness_centrality(pkp_graph, 75)
 
-    g = build_trust_graph("Wall of Xiomara Fernandez", pkp_graph)
-    for node_id in g.dictionary:
-        node = g.lookup_node(node_id)
-        for edge in node.links:
-            print edge.properties["weight"]
-
-    print len(g.dictionary)
-
-    print estimate_trust(30, 9700, g)
-
-
+    mens = []
+    womens = []
+    g = find_trends(4, pkp_graph, mens, womens)
+    print mens
+    print womens
     """
     for i in g.dictionary:
         print "---"
