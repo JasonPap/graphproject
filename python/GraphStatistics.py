@@ -111,12 +111,7 @@ def closeness_centrality(graph, node_id):
         if path[1] >= 0:
             i += 1
             cc += 1.0/float(path[1])
-        elif path[1] == 0:
-            print "wtf"
-        else:
-            print "OMG"
-    print i
-    print graph.number_of_nodes
+
     normalized_cc = float(cc)/float(graph.number_of_nodes - 1)
     return normalized_cc
 
@@ -176,9 +171,9 @@ def betweenness_centrality(graph):
                     CB[w] = delta[w]
 
     size = len(graph.dictionary)
-    param = float((size - 1)*(size - 2))/2
+    param = float((size - 1)*(size - 2))    # alagi logo directed graph
     for i in CB:
-        CB[i] = float(CB[i])/param
+        CB[i] = float(CB[i])/float(param)
     return CB
 
 

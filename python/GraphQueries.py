@@ -18,7 +18,7 @@ def match_suggestion(person_knows, node_id, interests, hops, age_diff, limit):
     recommendations = []
 
     for result in bfs_generator:
-        if result[1] < hops:
+        if result[1] <= hops:
             recommendations.append(result[0])
 
     recommendations = filter_gender(node_id, person_knows, recommendations)
@@ -172,7 +172,8 @@ def get_stalkers(likes_threshold, person_knows):
         persons_liked = dict()                                      # key: post_owner, value: likes to his posts
 
         for post_liked in bfs_generator:                            # for each post liked by this person
-            post_owner = post_has_owner_dict[post_liked[0]]         # find the owner of the post
+            if post_liked[0] in post_has_owner_dict:
+                post_owner = post_has_owner_dict[post_liked[0]]         # find the owner of the post
 
             if post_owner in persons_liked:
                 likes = persons_liked[post_owner]
@@ -200,9 +201,12 @@ def rank_stalkers(stalkers_graph, centrality_mode):
             scored_stalkers.append((score, stalker))
     elif centrality_mode == 2:          # for betweenness centrality
         # compute score of stalkers with betweenness centrality
-        scored_stalkers.append((1, 1))
+        cb_stalkers = betweenness_centrality(stalkers_graph)
+        for stalker_id in cb_stalkers:
+            scored_stalkers.append((cb_stalkers[stalker_id], stalker_id))
 
     scored_stalkers.sort()
+    scored_stalkers.reverse()
     return scored_stalkers
 
 
@@ -214,8 +218,9 @@ def find_trends(k, person_knows, women_trends, men_trends):
     for person_id in person_knows.dictionary:
         if person_knows.lookup_node(person_id).attributes["gender"] == "male":
             men_list.append(person_id)
-        else:
+        elif person_knows.lookup_node(person_id).attributes["gender"] == "female":
             women_list.append(person_id)
+        # else: there are nodes without gender
 
     womens_graph.fill_from_list(women_list, person_knows)
     mens_graph.fill_from_list(men_list, person_knows)
@@ -232,8 +237,8 @@ def find_trends(k, person_knows, women_trends, men_trends):
                 visited[interest] = [man_id]
             elif man_id not in visited[interest]:
                 visited[interest].append(man_id)
-            else:
-                break
+            # else:
+                # break
 
             trend_group = search_trend(mens_graph, man_id, interest, visited[interest])
             trend_group_size = len(trend_group)

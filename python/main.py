@@ -6,84 +6,59 @@ from GraphQueries import *
 
 
 def main():
-    print "hello world"
+
     pkp_graph = create_graph_from_file("person_knows_person.csv")
     populate_person_graph(pkp_graph, "person.csv", "person_hasInterest_tag.csv")
 
-    # print diameter(pkp_graph)
-    # print average_path_length(pkp_graph)
-    # print number_of_connected_components(pkp_graph)
-    # print max_connected_component(pkp_graph)
-    # print density(pkp_graph)
-    # print closeness_centrality(pkp_graph, 10)
-    # print closeness_centrality(pkp_graph, 75)
+    print "graph diameter = " + str(diameter(pkp_graph))
+    print "average path length = " + str(average_path_length(pkp_graph))
+    print "number of CC = " + str(number_of_connected_components(pkp_graph))
+    print "size of max CC = " + str(max_connected_component(pkp_graph))
+    print "density = " + str(density(pkp_graph))
 
-    mens = []
-    womens = []
-    g = find_trends(4, pkp_graph, mens, womens)
-    print mens
-    print womens
-    """
-    for i in g.dictionary:
-        print "---"
-        print "from " + str(i)
-        for e in g.lookup_node(i).links:
-            print "to " + str(e.edge_end)
-            print e.properties["weight"]
-            print "--"
-    """
-    # print estimate_trust(30, 9805, g)
+    # closeness centrality
+    print "closeness centrality of nodes 1734, 38, 8899, 3501 and 75:"
+    print closeness_centrality(pkp_graph, 1734)
+    print closeness_centrality(pkp_graph, 38)
+    print closeness_centrality(pkp_graph, 8899)
+    print closeness_centrality(pkp_graph, 3501)
+    print closeness_centrality(pkp_graph, 75)
 
-    """
-    for i in g.dictionary:
-        for j in g.dictionary:
-            x = estimate_trust(i, j, g)
-            if x > 0:
-                print "----"
-                print i
-                print j
-                print x
-        print i
-    """
+    # betweenness centrality
+    print "betweenness centrality of nodes 1734, 38, 8899, 9900 and 75:"
+    results = betweenness_centrality(pkp_graph)
+    print results[1734]
+    print results[38]
+    print results[8899]
+    print results[9900]
+    print results[75]
 
-    # print number_of_connected_components(pkp_graph)
-    # print diameter(pkp_graph)
-    # print average_path_length(pkp_graph)
-    # print max_connected_component(pkp_graph)
-    # print closeness_centrality(pkp_graph, 38)
-    # CB = betweenness_centrality(pkp_graph)
-    # for x in CB:
-        # print "node " + str(x)
-        # print CB[x]
+    # query one
+    print match_suggestion(pkp_graph, 3755, 1, 3, 30, 1)
 
-    """
-    graph = Graph()
-    node = Node(1, [], [])
-    graph.insert_node(node)
-    node = Node(2, [], [])
-    graph.insert_node(node)
-    node = Node(3, [], [])
-    graph.insert_node(node)
-    node = Node(4, [], [])
-    graph.insert_node(node)
-    node = Node(5, [], [])
-    graph.insert_node(node)
-    edge = Edge(2, [])
-    graph.insert_edge(1, edge)
-    edge = Edge(3, [])
-    graph.insert_edge(2, edge)
-    edge = Edge(4, [])
-    graph.insert_edge(2, edge)
-    edge = Edge(5, [])
-    graph.insert_edge(4, edge)
+    # query two
+    stalkers = []
+    stalkers_graph = get_top_stalkers(pkp_graph, 7, 1, 2, stalkers)
+    print "scored stalkers:"
+    print stalkers
 
-    dick = betweenness_centrality(graph)
-    for node_id in dick:
-        print "------"
-        print node_id
-        print dick[node_id]
-    """
+    # query three
+    men_trends = []
+    women_trends = []
+    find_trends(4, pkp_graph, women_trends, men_trends)
+    print "men trends:"
+    print men_trends
+    print "women trends:"
+    print women_trends
 
+    # query four
+    trust_graph = build_trust_graph("Wall of Xiomara Fernandez", pkp_graph)
+    print "trust 30 -> 9805:"
+    print estimate_trust(30, 9805, trust_graph)
+    print "trust 30 -> 9700:"
+    print estimate_trust(30, 9700, trust_graph)
+
+    return
 
 
 def fun():
