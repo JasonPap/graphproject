@@ -307,6 +307,7 @@ def search_trend(graph, start_node_id, trend, already_visited):
 def build_trust_graph(forum_name, person_knows):
 
     forum_id = -1
+    print "in build trust graph"
 
     with open("forum.csv", 'r') as input_file:
         first_line = input_file.readline()
@@ -323,6 +324,7 @@ def build_trust_graph(forum_name, person_knows):
     posts_in_forum = []
 
     with open("forum_containerOf_post.csv", 'r') as input_file:
+        print "opened forum_containerOf_post.csv"
         first_line = input_file.readline()
         first_line = first_line.rstrip('\n')
         parameters = first_line.split('|')
@@ -333,6 +335,7 @@ def build_trust_graph(forum_name, person_knows):
             if int(line[0]) == forum_id:
                 posts_in_forum.append(int(line[1]))
 
+    print "posts in forum = " + str(len(posts_in_forum))
     person_has_comments = dict()        # key = person_id        val = list of comment ids
     person_has_posts = dict()           # key = person_id        val = list of post ids
 
@@ -349,6 +352,8 @@ def build_trust_graph(forum_name, person_knows):
                     person_has_posts[int(line[1])].append(int(line[0]))
                 else:
                     person_has_posts[int(line[1])] = [int(line[0])]
+
+    print "person has posts size = " + str(len(person_has_posts))
 
     """
     with open("comment_hasCreator_person.csv", 'r') as input_file:
@@ -375,6 +380,7 @@ def build_trust_graph(forum_name, person_knows):
                 comment_of_post[int(line[0])] = int(line[1])
     print len(posts_in_forum)
 
+    """
     comments_of_comments = []
     with open("comment_replyOf_comment.csv", 'r') as input_file:
         first_line = input_file.readline()
@@ -389,6 +395,7 @@ def build_trust_graph(forum_name, person_knows):
 
     comments_in_forum.extend(comments_of_comments)
     comments_of_comments = []
+    """
 
     with open("comment_hasCreator_person.csv", 'r') as input_file:
         first_line = input_file.readline()

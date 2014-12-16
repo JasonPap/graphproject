@@ -10,8 +10,24 @@ def main():
     pkp_graph = create_graph_from_file("person_knows_person.csv")
     populate_person_graph(pkp_graph, "person.csv", "person_hasInterest_tag.csv")
 
+    # print diameter(pkp_graph)
+    # print average_path_length(pkp_graph)
+    # print number_of_connected_components(pkp_graph)
+    # print max_connected_component(pkp_graph)
+    # print density(pkp_graph)
+    # print closeness_centrality(pkp_graph, 10)
+    # print closeness_centrality(pkp_graph, 75)
 
-    g = build_trust_graph("Album 7 of Meera Kapoor", pkp_graph)
+    g = build_trust_graph("Wall of Xiomara Fernandez", pkp_graph)
+    for node_id in g.dictionary:
+        node = g.lookup_node(node_id)
+        for edge in node.links:
+            print edge.properties["weight"]
+
+    print len(g.dictionary)
+
+    print estimate_trust(30, 9700, g)
+
 
     """
     for i in g.dictionary:
@@ -22,7 +38,7 @@ def main():
             print e.properties["weight"]
             print "--"
     """
-    print estimate_trust(30, 9805, g)
+    # print estimate_trust(30, 9805, g)
 
     """
     for i in g.dictionary:
