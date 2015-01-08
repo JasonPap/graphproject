@@ -3,12 +3,16 @@ __author__ = 'Jason'
 from FileOperations import *
 from GraphStatistics import *
 from GraphQueries import *
+from communities import *
 
 
 def main():
 
     pkp_graph = create_graph_from_file("person_knows_person.csv")
     populate_person_graph(pkp_graph, "person.csv", "person_hasInterest_tag.csv")
+
+    r = find_top_n_communities(10)
+    create_communities_graphs(r, pkp_graph)
 
     print "graph diameter = " + str(diameter(pkp_graph))
     print "average path length = " + str(average_path_length(pkp_graph))
