@@ -98,6 +98,24 @@ def max_connected_component(graph):
     return max_cc
 
 
+def get_connected_components(graph):
+    visited_nodes = []
+    connected_components = []
+    for node_id in graph.dictionary:
+        if node_id not in visited_nodes:
+            cc = [node_id]
+            bfs_generator = graph.graph_bfs(node_id)
+            visited_nodes.append(node_id)
+            for path in bfs_generator:
+                if path[0] not in visited_nodes:
+                    visited_nodes.append(path[0])
+                    cc.append(path[0])
+
+            connected_components.append(cc)
+
+    return connected_components
+
+
 def density(graph):
     den = float((2*graph.number_of_edges))/float((graph.number_of_nodes*(graph.number_of_nodes - 1)))
     return den

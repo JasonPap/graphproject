@@ -3,6 +3,7 @@ __author__ = 'Jason'
 import itertools
 import Graph
 from Graph import *
+from GraphStatistics import *
 
 
 def get_cliques(graph, k, proc_pool):
@@ -51,5 +52,48 @@ def get_hyper_cliques(graph, k, proc_pool):
         node = Node(i, [], [])
         g_cliques.insert_node(node)
 
-    for i in g_cliques.dictionary:
-        # homework
+    arg = []
+    for i in range(len(l_cliques)):
+        arg.append((i, l_cliques, k))
+    results = proc_pool.map(get_hyper_edges, arg)
+
+    for result in results:
+        for hyper_edge in result:
+            edge = Edge(hyper_edge[1], [])
+            g_cliques.insert_edge(hyper_edge[0], edge)
+
+    cc = get_connected_components(g_cliques)
+    communities = []
+    counter = 1
+    for component in cc:
+        persons = []
+        for clique_id in component:
+            for p_id in l_cliques[clique_id]:
+                if p_id not in persons:
+                    persons.append(p_id)
+
+        communities.append(counter, persons)
+        counter += 1
+
+    return communities
+
+
+def get_hyper_edges(arg):
+    clique_id = arg[0]
+    l_cliques = arg[1]
+    k = arg[2]
+    result = []
+
+    main_clique = l_cliques[clique_id]
+    for i in range(len(l_cliques)):
+        counter = 0
+        if i != clique_id:
+            for val in main_clique:
+                if val in l_cliques[i]:
+                    counter += 1
+            if counter >= k - 1:
+                result.append((clique_id, i))
+
+    return result
+
+
