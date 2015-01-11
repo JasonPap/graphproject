@@ -1,18 +1,26 @@
 __author__ = 'Jason'
 
-from FileOperations import *
-from GraphStatistics import *
 from GraphQueries import *
-from communities import *
+from forums import *
+from Clique_Percolation_Method import *
+from multiprocessing import Pool
+import multiprocessing
 
 
 def main():
 
+    proc_pool = Pool(processes=multiprocessing.cpu_count())
+
     pkp_graph = create_graph_from_file("person_knows_person.csv")
     populate_person_graph(pkp_graph, "person.csv", "person_hasInterest_tag.csv")
 
-    r = find_top_n_communities(10)
-    create_communities_graphs(r, pkp_graph)
+    r = find_top_n_forums(6)
+    list_of_comm_graphs = create_forums_graphs(r, pkp_graph, proc_pool)
+    for community_graph in list_of_comm_graphs:
+        cl = percolation_method(community_graph, 3, proc_pool)
+        print cl
+
+    return 0
 
     print "graph diameter = " + str(diameter(pkp_graph))
     print "average path length = " + str(average_path_length(pkp_graph))
@@ -42,7 +50,7 @@ def main():
 
     # query two
     stalkers = []
-    stalkers_graph = get_top_stalkers(pkp_graph, 7, 1, 2, stalkers)
+    stalkers_graph = get_top_stalkers(pkp_graph, 7, 1, 1, stalkers)
     print "scored stalkers:"
     print stalkers
 

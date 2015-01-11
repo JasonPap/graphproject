@@ -1,7 +1,6 @@
 __author__ = 'Jason'
 
 import itertools
-import Graph
 from Graph import *
 from GraphStatistics import *
 
@@ -18,7 +17,7 @@ def get_cliques(graph, k, proc_pool):
         arg.append((comb, graph))
     results = proc_pool.map(test, arg)
     for result in results:
-        if result[0] is True:
+        if result[0] == True:
             cliques.append(result[1])
 
     return cliques
@@ -38,14 +37,14 @@ def test(arg):
 
         for neighbour in others:
             if neighbour not in linked_ids:
-                return False
+                return False, None
 
         local_comb.remove(idx)
 
     return True, combination
 
 
-def get_hyper_cliques(graph, k, proc_pool):
+def percolation_method(graph, k, proc_pool):
     l_cliques = get_cliques(graph, k, proc_pool)
     g_cliques = Graph()
     for i in range(len(l_cliques)):
@@ -72,7 +71,8 @@ def get_hyper_cliques(graph, k, proc_pool):
                 if p_id not in persons:
                     persons.append(p_id)
 
-        communities.append(counter, persons)
+        persons.sort()
+        communities.append((counter, persons))
         counter += 1
 
     return communities

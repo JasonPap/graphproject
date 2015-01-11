@@ -187,6 +187,8 @@ def betweenness_centrality(graph):
                     CB[w] += delta[w]
                 else:
                     CB[w] = delta[w]
+            elif w not in CB:
+                CB[w] = 0
 
     size = len(graph.dictionary)
     param = float((size - 1)*(size - 2))    # alagi logo directed graph

@@ -1,9 +1,8 @@
-from multiprocessing import Pool, Queue
-import multiprocessing
+
 from FileOperations import *
 
 
-def find_top_n_communities(n):
+def find_top_n_forums(n):
     """
     :param n: how many forums will be returned
     :return: list of forums
@@ -31,17 +30,17 @@ def find_top_n_communities(n):
     return r_list[:n]
 
 
-def create_communities_graphs(top_forums, pkp_graph, proc_pool):
+def create_forums_graphs(top_forums, pkp_graph, proc_pool):
     forum_has_member = create_graph_from_file("forum_hasMember_person.csv")
     # proc_pool = Pool(processes=multiprocessing.cpu_count())
     arg = []
     for forum in top_forums:
         arg.append((forum, pkp_graph, forum_has_member))
-    result = proc_pool.map(create_community, arg)
+    result = proc_pool.map(create_forums_graph, arg)
     return result
 
 
-def create_community(arg):
+def create_forums_graph(arg):
     forum_id = arg[0]
     pkp_graph = arg[1]
     forum_has_member = arg[2]

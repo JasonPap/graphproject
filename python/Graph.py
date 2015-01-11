@@ -162,6 +162,8 @@ class Graph:
 
         for person_id in persons_list:
             node = person_knows.lookup_node(person_id)
+            if node is None:
+                continue
             new_node = Node(person_id, [], [])
             for attr in node.attributes:
                 new_node.attributes[attr] = node.attributes[attr]
