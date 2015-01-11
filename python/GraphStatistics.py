@@ -218,3 +218,61 @@ def betweenness_centrality_slow(graph, node_id):
     CB = CB/tmp
 
     return CB
+
+
+def edge_betweeness_centrality(graph):
+    CB = dict()
+    Q = deque()
+    S = []  # stack
+    delta = dict()
+    for s in graph.dictionary:
+        # single-source shortest-paths problem
+        # initialization
+        Pred = dict()
+        dist = dict()
+        sigma = dict()
+        for w in graph.dictionary:
+            Pred[w] = []
+            dist[w] = float("inf")
+            sigma[w] = 0
+
+        dist[s] = 0
+        sigma[s] = 1
+        Q.append(s)
+
+        while Q:
+            v = Q.pop()
+            S.append(v)
+
+            links = graph.dictionary[v].links
+            neibghours = []
+            for edge in links:
+                neibghours.append(edge.edge_end)
+
+            for neibghour in neibghours:
+                # path discovery
+                if dist[w] == float("inf"):
+                    dist[w] = dist[v] + 1
+                    Q.append(w)
+
+                #path counting
+                if dist[w] == dist[v] + 1:
+                    sigma[w] = sigma[w] + sigma[v]
+                    Pred[w].append(v)
+
+        #accumulation
+        for v in graph.dictionary:
+            delta[v] = 0
+
+        while S:
+            w = S.pop()
+            for v in Pred[w]:
+                delta[v] = delta[v] + (float(sigma[v])/float(sigma[w])) * (1 + delta[w])
+
+            if w != s:
+                CB[w] = CB[w] + delta[w]
+            elif w not in CB:
+                CB[w] = 0
+
+    return CB
+
