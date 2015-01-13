@@ -35,6 +35,18 @@ class Graph:
         else:
             return False
 
+    def remove_edge(self, start, end):
+        if start in self.dictionary and end in self.dictionary:
+            node = self.dictionary[start]
+            edge_to_remove = None
+            for edge in node.links:
+                if edge.edge_end == end:
+                    edge_to_remove = edge
+                    break
+
+            node.links.remove(edge_to_remove)
+            self.number_of_edges -= 1
+
     def lookup_node(self, node_id):
         """
         Return the Node with id = node_id if there is one in the Graph

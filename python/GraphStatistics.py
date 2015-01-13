@@ -249,13 +249,13 @@ def edge_betweeness_centrality(graph):
             for edge in links:
                 neibghours.append(edge.edge_end)
 
-            for neibghour in neibghours:
+            for w in neibghours:
                 # path discovery
                 if dist[w] == float("inf"):
                     dist[w] = dist[v] + 1
                     Q.append(w)
 
-                #path counting
+                # path counting
                 if dist[w] == dist[v] + 1:
                     sigma[w] = sigma[w] + sigma[v]
                     Pred[w].append(v)
@@ -267,12 +267,12 @@ def edge_betweeness_centrality(graph):
         while S:
             w = S.pop()
             for v in Pred[w]:
-                delta[v] = delta[v] + (float(sigma[v])/float(sigma[w])) * (1 + delta[w])
+                delta[v] += (float(sigma[v])/float(sigma[w])) * (1 + delta[w])
 
+            if w not in CB:
+                CB[(s, w)] = 0
             if w != s:
-                CB[w] = CB[w] + delta[w]
-            elif w not in CB:
-                CB[w] = 0
+                CB[(s, w)] = CB[(s, w)] + delta[w]
 
     return CB
 

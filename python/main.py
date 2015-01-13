@@ -14,6 +14,12 @@ def main():
     pkp_graph = create_graph_from_file("person_knows_person.csv")
     populate_person_graph(pkp_graph, "person.csv", "person_hasInterest_tag.csv")
 
+    fucking_dick = edge_betweeness_centrality(pkp_graph)
+    print fucking_dick[(25, 9805)]
+    print fucking_dick[(9805, 25)]
+
+    return
+
     r = find_top_n_forums(6)
     list_of_comm_graphs = create_forums_graphs(r, pkp_graph, proc_pool)
     for community_graph in list_of_comm_graphs:
