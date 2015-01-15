@@ -43,9 +43,9 @@ class Graph:
                 if edge.edge_end == end:
                     edge_to_remove = edge
                     break
-
-            node.links.remove(edge_to_remove)
-            self.number_of_edges -= 1
+            if edge_to_remove is not None:
+                node.links.remove(edge_to_remove)
+                self.number_of_edges -= 1
 
     def lookup_node(self, node_id):
         """
