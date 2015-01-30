@@ -14,14 +14,14 @@ def girvan_newman(given_graph, limit):
         remove_max_edge(ecb, graph)
         ecb = edge_betweeness_centrality(graph)
         Q = compute_modularity(graph)
-        print "Q = " + str(Q)
+        # print "Q = " + str(Q)
 
         if Q > limit:
-            print "limit"
+            # print "limit"
             break
 
         if (Q - prev_Q) < 0.00001:
-            print "dif"
+            # print "dif"
             break
 
         prev_Q = Q
@@ -60,7 +60,7 @@ def remove_max_edge(edge_centrality_betweeness_dict_bi, graph):
 
 
 def compute_modularity(graph):
-    print "-----start-----"
+    # print "-----start-----"
     m = graph.number_of_edges
     total = 0.0
     node_ids = graph.get_node_ids()
@@ -79,8 +79,8 @@ def compute_modularity(graph):
             delta = 1
 
         total += (alpha - (float(node_1_degree*node_2_degree))/float(m)) * delta
-        print "total = " + str(total)
-    print "-----end-----"
+        # print "total = " + str(total)
+    # print "-----end-----"
     return float(total)/float(m)
 
 
