@@ -21,7 +21,7 @@ def main():
     for community_graph in list_of_comm_graphs:
         print percolation_method(community_graph, 3, proc_pool)
 
-    print "GM:"
+    print "GN:"
     for community_graph in list_of_comm_graphs:
         cl = girvan_newman(community_graph, 1)
         print cl

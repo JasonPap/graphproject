@@ -1,6 +1,7 @@
 __author__ = 'Jason'
 
 from collections import deque
+import itertools
 
 
 def degree_distribution(graph):
@@ -275,4 +276,43 @@ def edge_betweeness_centrality(graph):
                 CB[(s, w)] = CB[(s, w)] + delta[w]
 
     return CB
+
+
+def edge_betweeness_centrality_slow(graph):
+    num_of_paths = 0
+    node_ids = graph.get_node_ids()
+    node_combinations = itertools.combinations(node_ids, 2)
+    edge_weight = dict()
+    for combination in node_combinations:
+        if graph.reach_node_1(combination[0], combination[1]) != -1:
+            dijsktra_generator = graph.dijkstra_shortest_paths_from(combination[0], combination[1])
+            for path in dijsktra_generator:
+                num_of_paths += 1
+                if (combination[0], path[0]) in edge_weight:
+                    edge_weight[(combination[0], path[0])] += 1
+                else:
+                    edge_weight[(combination[0], path[0])] = 1
+
+                i = 0
+                while i + 1 < len(path):
+                    if (path[i], path[i + 1]) in edge_weight:
+                        edge_weight[(path[i], path[i + 1])] += 1
+                    else:
+                        edge_weight[(path[i], path[i + 1])] = 1
+                    i += 1
+
+    for edge in edge_weight:
+        if edge_weight[edge] != 0:
+            if (edge[1], edge[0]) in edge_weight:
+                edge_weight[edge] += edge_weight[(edge[1], edge[0])]
+                edge_weight[(edge[1], edge[0])] = 0
+
+    CB = dict()
+    for edge in edge_weight:
+        if edge_weight[edge] != 0:
+            CB[edge] = float(edge_weight[edge])/float(num_of_paths)
+
+    return CB
+
+
 
